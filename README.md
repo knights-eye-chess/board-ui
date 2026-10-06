@@ -1,9 +1,47 @@
-# @knights-eye-chess/board-ui (private phase-8 preview)
+# Knight's Eye Board UI
 
-An actual controlled browser board, requiring no framework, chess engine, classifier, AI, game tree, storage, or chess.js. Import `mountControlledBoard` and pass a host element. Each instance owns one child with isolated Shadow DOM styles and supports complete state replacement and idempotent disposal. No artwork or external requests are bundled; the host supplies every piece URL.
+A controlled chess board for browser applications. Supply positions and allowed
+moves; the board renders them and emits move intentions. No framework, engine,
+classifier, AI service, game tree or persistent storage is required.
+
+![Controlled board with optional glossy pieces, last-move highlighting and host-supplied overlays](docs/screenshots/board.png)
+
+*Actual library rendering after 1.e4 e5. The arrow and badge are host-supplied presentation;
+they do not imply an engine evaluation or classification.*
+
+Private preview: `@knights-eye-chess/board-ui@0.1.0-dev.3`. No public registry
+release or license grant has been made.
+
+## Responsibilities
+
+| Board UI | Your application |
+| --- | --- |
+| Squares, pieces, coordinates and orientation | Authoritative position and history |
+| Click, drag, keyboard and promotion interaction | Chess legality, turn rules and applying moves |
+| Optional arrows, badges and last-move highlights | Meaning of overlays and classifications |
+| Isolated styles, focus and disposal | PGN/FEN parsing, navigation, accounts and storage |
+
+Use `mountControlledBoard` for the interactive board. The `/renderer` entry point
+exposes square rendering and coordinate helpers for hosts with their own
+interaction controller.
+
+## Quick start
+
+Install a checked private archive. These previews are not in the public registry:
+
+```sh
+npm install /path/to/knights-eye-chess-board-ui-0.1.0-dev.3.tgz
+```
+
+Give the host a width; the board fills it and stays square.
+
+```html
+<div id="board" style="width:min(100%, 560px)"></div>
+```
 
 ```js
 import { mountControlledBoard } from '@knights-eye-chess/board-ui';
+
 let state = {
   position: { e1: 'K', e8: 'k', e2: 'P' },
   orientation: 'white', selectedSquare: null,
@@ -12,64 +50,109 @@ let state = {
 };
 const board = mountControlledBoard(document.querySelector('#board'), {
   state,
-  pieceUrl: piece => `/my-pieces/${piece === piece.toUpperCase() ? 'w' : 'b'}${piece.toLowerCase()}.png`,
-  onSelect: square => { state = { ...state, selectedSquare: square }; board.update(state); },
+  pieceUrl: piece =>
+    `/pieces/${piece === piece.toUpperCase() ? 'w' : 'b'}${piece.toLowerCase()}.png`,
+  onSelect: square => {
+    state = { ...state, selectedSquare: square };
+    board.update(state);
+  },
   onMove: intent => {
-    // Validate intent.uci against your authoritative game, apply it there,
-    // then replace position, legalMoves, selectedSquare and positionKey.
+    // Your game validates intent.uci and applies it.
+    // Update position, legalMoves and positionKey from that authoritative state.
     console.log(intent.uci, intent.source);
   }
 });
+
 board.update({ ...state, orientation: 'black' });
+// When the host is removed:
 board.dispose();
 ```
 
-Square keys are algebraic coordinates; piece values are FEN letters. Supply exact permitted UCI moves, including promotion suffixes; the board never generates chess moves or commits a position itself. Click an origin and destination, drag a permitted piece, or focus a square and use arrows plus Enter/Space. Home/End focus row endpoints, Escape cancels selection or promotion, and Tab stays inside an open promotion chooser. Permission updates, new position/occurrence/orientation or move list cancel pending promotion and drag. A host that rejects an intent can simply keep its state.
+## Optional piece artwork
 
-Optional `lastMove`, `badges` and `arrows` are presentation data. Badge labels/text/colors and arrow labels/colors/opacity/width are caller supplied, with no classification semantics. Labels render as text, never executable HTML. Optional `label` names the grid. Customize square colors through inherited `--board-light`, `--board-dark`, focus through `--board-focus`, and chooser colors through `--board-dialog` / `--board-dialog-text`. Set the host's width to control the responsive square board.
+`assets/pieces/` contains all twelve original glossy PNG sprites: `wp`, `wr`,
+`wn`, `wb`, `wq`, `wk` and their black counterparts. They are available through
+the `@knights-eye-chess/board-ui/pieces/*` export subpath for build tools.
+See [provenance and asset ownership](assets/README.md).
 
-State replacement is detached from mutable host objects. `update` after disposal throws; repeated disposal does nothing. Changing `positionKey` cancels transient gestures when two occurrences have the same placement. Callbacks may synchronously call `update`. Multiple mounts on different hosts have separate DOM, event listeners, focus and gesture state.
-
-This preview supports modern browsers with Shadow DOM, Pointer Events and CSS aspect-ratio. Mouse/pointer Chromium is qualified; actual phone/iOS input is not claimed. The package is private and does not imply a public SDK release.
-
-
-The packed artifact includes canonical TypeScript source, its own build and tests,
-and an npm shrinkwrap with pinned development tools. To rebuild and verify it
-after extracting the tarball outside the application checkout:
+For a simple static application, copy them to the host's public directory:
 
 ```sh
-npm ci
-node -e "require('node:fs').rmSync('dist', { recursive: true, force: true })"
-npm run build
-npm test
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:browser
+mkdir -p public/pieces
+cp node_modules/@knights-eye-chess/board-ui/assets/pieces/*.png public/pieces/
 ```
 
-Without a supplied browser executable, install Playwright Chromium with
-`npx playwright install chromium` and run `npm run test:browser`. The browser
-check serves the shipped independent host example and writes `browser-results.json`.
-The runtime uses neither these development tools nor application code. Version
-`0.1.0-phase.8.1` identifies the source-complete preview; it supersedes the earlier
-dist-only qualification.
+Supply `/pieces/<name>.png` through `pieceUrl`, as above. Hosts may instead use
+bundler asset-URL imports or serve another path. Installing an npm package does
+not automatically expose its files through your web server.
 
-## Standalone repository build
+Any other piece set works through the same callback. The JavaScript renderer
+imports no artwork; it loads only the piece URLs supplied by the host.
+The optional sprites add about 4 MiB to the installed package. Their square,
+transparent canvases preserve alignment; source files were not cropped or resized.
 
-Use Node 24 or newer. From a clean checkout:
+## State and lifecycle
+
+| Field / method | Contract |
+| --- | --- |
+| `position` | Algebraic keys (`e4`) mapped to FEN piece letters (`P`, `n`) |
+| `orientation` | `white` or `black` |
+| `selectedSquare` | A square or `null`; host-controlled |
+| `legalMoves` | Exact UCI strings, including promotion suffixes (`a7a8n`) |
+| `positionKey` | Occurrence token; change it on navigation even if placement repeats |
+| `permissions` | `select`, `move`, optional `draggable` |
+| `onMove` | `{ from, to, uci, source, promotion? }`; source is `click`, `drag` or `keyboard` |
+| `update(state)` | Complete replacement; mutable host objects are copied |
+| `dispose()` | Removes this instance's DOM/listeners; repeated calls are safe |
+
+The board does not parse PGN/FEN, generate legality or commit positions. Reject
+a move intention by keeping the current state. Callbacks may synchronously call
+`update`; separate mounts have independent DOM and interaction state. Updating
+a disposed board throws. Changes to permissions, occurrence, position,
+orientation or allowed moves cancel pending gestures and promotion.
+
+## Overlays, themes and accessibility
+
+`lastMove`, `badges` and `arrows` are optional. Their labels, colors and meaning
+belong to the host; no classification policy is included. Labels render as text.
+`label` names the accessible board grid.
+
+Customize inherited CSS variables: `--board-light`, `--board-dark`,
+`--board-focus`, `--board-dialog`, `--board-dialog-text`. Shadow DOM isolates
+each instance's layout from the host page.
+
+Use arrows to navigate, Enter/Space to select/move, Home/End for row endpoints
+and Escape to cancel. Promotion traps Tab and returns focus. Chromium mouse
+behavior is checked at desktop and 375-pixel widths; real touch/iOS remain
+unqualified.
+
+## Build, demo and screenshot
+
+Use Node 24 or newer:
 
 ```sh
 npm ci
 npm run check
-npm run pack:checked
+python3 -m http.server 8080 --bind 127.0.0.1
 ```
 
-The source snapshot is recorded in `SOURCE-ORIGIN.json`. This private preview
-uses version `0.1.0-dev.2`; earlier `0.1.0-dev.1` artifacts remain immutable.
-Internal dependencies are pinned archives in `vendor/npm`. Update an existing
-dependency with `node scripts/update-dependency.mjs @knights-eye-chess/name
-/absolute/path/package.tgz`, then run `npm ci` and `npm run check`. Review the
-manifest, lockfile, archive hash and tests together before committing.
-No registry, automatic CI or website deployment is required for these commands.
+Open `http://127.0.0.1:8080/examples/standalone.html`. Its host-owned allowed
+moves and controls demonstrate orientation, promotion, permissions and disposal;
+it is not a full game implementation.
 
-`pack:artifact` packs a temporary copy and records exact package versions for
-sibling dependencies. Use it instead of bare `npm pack`; repository-local file
-pins belong to the source build and are not published as consumer dependencies.
+```sh
+npx playwright install chromium
+npm run test:browser
+npm run docs:screenshot
+```
+
+For a system Chromium, set
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium`. The screenshot captures
+the real library with 32 loaded sprites and checks for browser errors.
+
+`npm run pack:checked` builds/tests and creates a private archive. Bump versions
+before sharing different bytes. Accepted `.1`/`.2` archives remain immutable.
+The checked `.3` candidate is committed under `artifacts/` with its hash in
+`QUALIFICATION.json`.
+New artifacts are adopted explicitly by consumers; this update does not change
+the website's installed `.2` package or deploy a site. Manual GitHub checks only.

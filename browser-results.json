@@ -1,0 +1,41 @@
+{
+  "node": "v24.19.0",
+  "engine": "Chromium /usr/bin/chromium",
+  "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.3",
+  "results": [
+    {
+      "width": 1280,
+      "squares": 64,
+      "click": true,
+      "drag": true,
+      "keyboard": true,
+      "promotionCancel": true,
+      "underpromotion": "a7a8n",
+      "flippedPromotion": true,
+      "focusTrap": true,
+      "permissionRevocation": true,
+      "arbitraryOverlay": true,
+      "focusRetention": true,
+      "multiInstance": true,
+      "disposal": true,
+      "errors": []
+    },
+    {
+      "width": 375,
+      "squares": 64,
+      "click": true,
+      "drag": true,
+      "keyboard": true,
+      "promotionCancel": true,
+      "underpromotion": "a7a8n",
+      "flippedPromotion": true,
+      "focusTrap": true,
+      "permissionRevocation": true,
+      "arbitraryOverlay": true,
+      "focusRetention": true,
+      "multiInstance": true,
+      "disposal": true,
+      "errors": []
+    }
+  ]
+}

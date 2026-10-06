@@ -1,0 +1,57 @@
+{
+  "schema": "knights-eye-piece-assets/1",
+  "sourceRepository": "knights-eye-chess/knightseye-net",
+  "sourceCommit": "94edf1e176f0bf99d51c696b5ba62c85b6a018f5",
+  "sourceDirectory": "public/pieces/glossy",
+  "pixelChanges": false,
+  "files": [
+    {
+      "file": "bb.png",
+      "sha256": "f921f223a6aee7284e8281bd1c27d1f611fe1f66fb9feffdeee80c6a932dd846"
+    },
+    {
+      "file": "bk.png",
+      "sha256": "ca9beeb9c199ca9d03599559b7485f7311b91652d67c2ec9f6aae6ab49ba6cda"
+    },
+    {
+      "file": "bn.png",
+      "sha256": "33faddc4ee729ef4d5927d182c80bb6f55848b3af1d5986e49b3dd6a199237f0"
+    },
+    {
+      "file": "bp.png",
+      "sha256": "99d8d5d334387992ebf0ea44c15787d8c8ca801719eff2fc6bd2d78f62a7a26b"
+    },
+    {
+      "file": "bq.png",
+      "sha256": "a10b6f2d80adda1e3a70a6f89300f6a86e9e4ae1f7b795c41cf7fd17514eafe1"
+    },
+    {
+      "file": "br.png",
+      "sha256": "9431b6baa99f3c9c6b3281e02340ddc0a2c0ee96baa1f6b556c9a00e25bd7500"
+    },
+    {
+      "file": "wb.png",
+      "sha256": "e3d197179c6c1f94f8a8f00d31c0e57d61f64ca6c458b261178d4aeeeadc56f1"
+    },
+    {
+      "file": "wk.png",
+      "sha256": "06ee293d14c52e221181979f4b11c20878b44e9bccf590e14413a85f15108292"
+    },
+    {
+      "file": "wn.png",
+      "sha256": "4bad2d77893978405ef673077125eff5c54b8652dc443b01b88faf444890e4d5"
+    },
+    {
+      "file": "wp.png",
+      "sha256": "c13497ab882490dc66680ff15ce4eb37fcbc76633c98c297dde6abb4e188158d"
+    },
+    {
+      "file": "wq.png",
+      "sha256": "d79b4951784e3b5ed53a2ad3a187acfab7193a8599c3ca58c1a8ef0bc9de9348"
+    },
+    {
+      "file": "wr.png",
+      "sha256": "1a078a732bc066c9b51cdab2af507828cdf88af88731d2bee1500d831ff5c6d3"
+    }
+  ]
+}

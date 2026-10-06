@@ -1,0 +1,75 @@
+{
+  "version": "0.1.0-dev.2",
+  "sourceCommit": "d58a1a2ad3132515891a2452596ab571af4b55ba",
+  "node": "v24.19.0",
+  "sourceHashes": [
+    {
+      "path": ".gitignore",
+      "sha256": "51f1977cb4ab14529d1e1723c11e05c11e63c368926b8901c89812382fba9008"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "4cbea767f7905f577d90fef443ee663c96be49e9d418863343ca87e33c1effeb"
+    },
+    {
+      "path": "README.md",
+      "sha256": "e21744f1a79dbd7b1aa49a0f36055c21fe48c671dabee14bb02dfb27b9db82fd"
+    },
+    {
+      "path": "SOURCE-ORIGIN.json",
+      "sha256": "1f45e61d29b8620e88966296c17c2970585fe121c356135ed73644b6960af78e"
+    },
+    {
+      "path": "build.mjs",
+      "sha256": "4e956b0708a48d62ad94a298ab7aedf11d3e57dc4c7f3ee788c241cb03498169"
+    },
+    {
+      "path": "examples/standalone.html",
+      "sha256": "2e55f8ac69fe5eefb1690e96fd5424aea2748a745f9d466107b88b55372b1597"
+    },
+    {
+      "path": "npm-shrinkwrap.json",
+      "sha256": "855d9bacb9649875e1ac45c56380fe31663df164799aaee99df162d07eb2e0d4"
+    },
+    {
+      "path": "package.json",
+      "sha256": "37168eacc824fc5b79f825488a4ea2e4ddadfb807263bafcb6550714b962107f"
+    },
+    {
+      "path": "scripts/pack.mjs",
+      "sha256": "4acea39a16b814ab12fa59983e028a80cdd6cb5f128f308a8cdc184b0a78910b"
+    },
+    {
+      "path": "scripts/update-dependency.mjs",
+      "sha256": "c398519a64ccd3770af24bfdd353364e9bde5a477ae3d5ed2a54f66e279c15d6"
+    },
+    {
+      "path": "src/controlled-board-renderer.ts",
+      "sha256": "27e1409660a89ede50e5620adcd0d78d4bfd733f363f5404888b88aa9fabec8f"
+    },
+    {
+      "path": "src/controlled-board.ts",
+      "sha256": "f76a7318927b07585fd84eba06f87b58ac723c7d68148ddf2581eaa1f4ab3c6b"
+    },
+    {
+      "path": "tests/browser-check.mjs",
+      "sha256": "8610a378d6c8282bafc0221d8631352e0619828800ff2821bb57ada4a4d4be41"
+    },
+    {
+      "path": "tests/controlled-board.test.mjs",
+      "sha256": "cd3cf06c5ce508a10a7e517dfffa5a2a3d419526e2017cc0908af164438c254a"
+    }
+  ],
+  "standaloneNpmCi": true,
+  "standaloneBuild": true,
+  "standaloneTests": 3,
+  "packedConsumerNpmCi": true,
+  "packedConsumerTests": 3,
+  "typeConsumer": "not additionally run",
+  "limits": "Offline fixtures and process mocks; no real engine corpus, live model/provider, website deployment or physical-device qualification",
+  "postQualificationDocumentation": {
+    "changedFiles": [],
+    "verification": "Only repository README wording changed after passing source/packed runtime checks. Runtime, build scripts, tests and accepted dev.2 archive bytes unchanged.",
+    "artifactDocumentation": "Initial immutable dev.2 archive README retains earlier terminology; current repository README is corrected. Any future changed artifact requires a new version."
+  }
+}

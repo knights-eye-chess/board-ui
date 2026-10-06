@@ -4,7 +4,7 @@ import {createRequire} from 'node:module';
 import assert from 'node:assert/strict';
 const require=createRequire(import.meta.url);
 const {chromium}=require('playwright');
-const root=new URL('../',import.meta.url),server=createServer((req,res)=>{try{const path=new URL(req.url,'http://localhost').pathname;const file=new URL('.'+(path==='/'?'/examples/standalone.html':path),root);if(!file.href.startsWith(root.href))throw Error();res.setHeader('content-type',path.endsWith('.js')?'text/javascript':'text/html');res.end(readFileSync(file));}catch{res.statusCode=404;res.end();}});
+const root=new URL('../',import.meta.url),server=createServer((req,res)=>{try{const path=new URL(req.url,'http://localhost').pathname;const file=new URL('.'+(path==='/'?'/examples/standalone.html':path),root);if(!file.href.startsWith(root.href))throw Error();res.setHeader('content-type',path.endsWith('.js')?'text/javascript':path.endsWith('.png')?'image/png':'text/html');res.end(readFileSync(file));}catch{res.statusCode=404;res.end();}});
 await new Promise(resolve=>server.listen(4898,'127.0.0.1',resolve));
 const browser=await chromium.launch({...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ? {executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH} : {}),headless:true,args:['--no-sandbox']});const results=[];
 try{for(const width of [1280,375]){
@@ -24,4 +24,5 @@ try{for(const width of [1280,375]){
  await page.locator('#dispose').click();assert.equal(await page.locator('#board').innerHTML(),'');assert.equal(await page.locator('#secondary .sq').count(),64);await page.evaluate(()=>{let threw=false;try{window.boardDemo.board.update(window.demoState);}catch{threw=true;}if(!threw)throw Error('Update after disposal accepted');});assert.deepEqual(errors,[]);
  results.push({width,squares:64,click:true,drag:true,keyboard:true,promotionCancel:true,underpromotion:'a7a8n',flippedPromotion:true,focusTrap:true,permissionRevocation:true,arbitraryOverlay:true,focusRetention:true,multiInstance:true,disposal:true,errors});await page.close();
 }}finally{await browser.close();server.close();}
-writeFileSync(new URL('./browser-results.json',root),JSON.stringify({node:process.version,engine:'Chromium '+(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH||'Playwright bundled browser'),installedPackage:'@knights-eye-chess/board-ui@0.1.0-phase.8.1',results},null,2));console.log(JSON.stringify(results));
+const manifest=JSON.parse(readFileSync(new URL('package.json',root),'utf8'));
+writeFileSync(new URL('./browser-results.json',root),JSON.stringify({node:process.version,engine:'Chromium '+(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH||'Playwright bundled browser'),installedPackage:`${manifest.name}@${manifest.version}`,results},null,2));console.log(JSON.stringify(results));
