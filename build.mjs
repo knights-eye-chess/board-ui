@@ -1,0 +1,16 @@
+import { build } from 'esbuild';
+import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+const root = fileURLToPath(new URL('./', import.meta.url));
+const out = path.join(root, 'dist');
+rmSync(out, { recursive:true, force:true }); mkdirSync(out, { recursive:true });
+const result = await build({ entryPoints:[path.join(root,'src/controlled-board.ts'),path.join(root,'src/controlled-board-renderer.ts')], bundle:false, format:'esm', platform:'browser', target:'es2022', outdir:out, metafile:true });
+const config = { compilerOptions:{ declaration:true, emitDeclarationOnly:true, strict:true, target:'ES2022', module:'ESNext', moduleResolution:'Bundler', lib:['ES2022','DOM'], types:[], skipLibCheck:true, rootDir:path.join(root,'src'), outDir:out }, files:[path.join(root,'src/controlled-board.ts')] };
+const configFile=path.join(out,'declarations.json');writeFileSync(configFile,JSON.stringify(config));
+const require = createRequire(import.meta.url);
+const declarations=spawnSync(process.execPath,[require.resolve('typescript/bin/tsc'),'-p',configFile],{cwd:root,encoding:'utf8'});rmSync(configFile);
+if(declarations.status!==0)throw new Error(declarations.stdout+declarations.stderr);
+console.log(JSON.stringify({package:'@knights-eye-chess/board-ui',runtimeInputs:Object.keys(result.metafile.inputs).sort()}));

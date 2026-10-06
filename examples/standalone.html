@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Controlled board independent host</title>
+<style>body{font:16px system-ui;margin:12px}main{max-width:560px}#secondary{width:180px;margin-top:12px}button{padding:8px;margin:6px 6px 6px 0}pre{white-space:pre-wrap}</style>
+<script type="importmap">{"imports":{"@knights-eye/chess-board":"../dist/controlled-board.js"}}</script>
+<main><h1>Controlled board host</h1><p>The host supplies moves, selection, positions and presentation.</p><div id="board"></div><button id="flip">Flip</button><button id="promotion">Promotion position</button><button id="reset">Reset</button><button id="lock">Toggle permissions</button><button id="dispose">Dispose</button><pre id="intent" aria-live="polite"></pre><div id="secondary"></div></main>
+<script type="module">
+import {mountControlledBoard} from '@knights-eye/chess-board';
+// These data URLs are this demo host's assets, not package-supplied chess artwork.
+const glyphs={K:'♔',Q:'♕',R:'♖',B:'♗',N:'♘',P:'♙',k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'};
+const pieceUrl=piece=>'data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="80" text-anchor="middle" font-size="88">${glyphs[piece]}</text></svg>`);
+let generation=0;
+const initial=()=>({position:{e1:'K',e8:'k',e2:'P',b1:'N'},orientation:'white',selectedSquare:null,permissions:{select:true,move:true,draggable:true},legalMoves:['e2e3','e2e4','b1a3','b1c3'],positionKey:String(++generation),badges:[{square:'e2',label:'Host-defined recommended piece',text:'!',color:'white',background:'purple'}],arrows:[{from:'e2',to:'e4',label:'Host-defined advance',color:'#945ac5'}]});
+let state=initial();window.intents=[];
+function set(next){state=next;board.update(state);window.demoState=state;}
+const board=mountControlledBoard(document.querySelector('#board'),{state,pieceUrl,onSelect:square=>set({...state,selectedSquare:square}),onMove:intent=>{window.intents.push(intent);document.querySelector('#intent').textContent=JSON.stringify(intent);const position={...state.position};const piece=position[intent.from];delete position[intent.from];position[intent.to]=intent.promotion?(piece===piece.toUpperCase()?intent.promotion.toUpperCase():intent.promotion):piece;set({...state,position,positionKey:String(++generation),selectedSquare:null,legalMoves:[],lastMove:[intent.from,intent.to]});}});
+const secondary=mountControlledBoard(document.querySelector('#secondary'),{state:{...initial(),permissions:{select:false,move:false},label:'Independent second board'},pieceUrl,onSelect(){throw Error('Read-only selection emitted');},onMove(){throw Error('Read-only move emitted');}});
+window.boardDemo={board,secondary,set,get state(){return state;}};window.demoState=state;
+document.querySelector('#flip').onclick=()=>set({...state,orientation:state.orientation==='white'?'black':'white'});
+document.querySelector('#promotion').onclick=()=>set({...state,position:{a7:'P',e1:'K',e8:'k'},selectedSquare:null,positionKey:String(++generation),permissions:{select:true,move:true,draggable:true},legalMoves:['a7a8q','a7a8r','a7a8b','a7a8n'],arrows:[],badges:[]});
+document.querySelector('#reset').onclick=()=>set(initial());
+document.querySelector('#lock').onclick=()=>set({...state,permissions:{select:!state.permissions.select,move:!state.permissions.move}});
+document.querySelector('#dispose').onclick=()=>{board.dispose();board.dispose();};
+window.ready=true;
+</script></html>

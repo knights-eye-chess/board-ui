@@ -1,0 +1,50 @@
+{
+  "name": "@knights-eye-chess/board-ui",
+  "version": "0.1.0-dev.2",
+  "private": true,
+  "type": "module",
+  "description": "Controlled engine-free chess board UI with host-owned position and legality",
+  "exports": {
+    ".": {
+      "types": "./dist/controlled-board.d.ts",
+      "import": "./dist/controlled-board.js"
+    },
+    "./renderer": {
+      "types": "./dist/controlled-board-renderer.d.ts",
+      "import": "./dist/controlled-board-renderer.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "tests",
+    "build.mjs",
+    "README.md",
+    "examples",
+    "npm-shrinkwrap.json",
+    "vendor",
+    "SOURCE-ORIGIN.json",
+    "scripts"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "npm run build && node --test tests/controlled-board.test.mjs",
+    "test:browser": "node tests/browser-check.mjs",
+    "check": "npm run build && npm test",
+    "pack:checked": "npm run check && node scripts/pack.mjs",
+    "pack:artifact": "node scripts/pack.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.0",
+    "typescript": "5.9.3",
+    "playwright": "1.62.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/knights-eye-chess/board-ui.git"
+  }
+}
