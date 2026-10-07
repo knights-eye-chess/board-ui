@@ -36,6 +36,7 @@ export function mountBoardViewer(host: HTMLElement, options: BoardViewerOptions)
   if (stripHost && !options.slots?.moveStrip) { host.appendChild(stripHost); owned.push(stripHost); }
   let strip: MoveStrip | undefined, board: ControlledBoard | undefined, disposed = false;
   const cleanups: Array<()=>void> = [];
+  const originalTabIndex=boardHost.getAttribute('tabindex');cleanups.push(()=>{if(originalTabIndex===null)boardHost.removeAttribute('tabindex');else boardHost.setAttribute('tabindex',originalTabIndex);});
   const catalogue = options.board.appearance ?? defaultBoardAppearance;
   let presentation: BoardAppearanceUpdate = { ...options.board.appearanceSelection };
   const sharedIcons = () => {
@@ -86,7 +87,7 @@ export function mountBoardViewer(host: HTMLElement, options: BoardViewerOptions)
     centerStrip() { alive(); strip?.center(); },
     getBranchRows() { alive(); return strip?.getBranchRows() ?? {}; },
     getInteractionState() { alive(); return strip?.getInteractionState() ?? { pointerActive:false, userGesture:false, userPositioned:false }; },
-    updateNavigationControls(state) { alive(); if(options.slots?.previous)options.slots.previous.disabled=state.previousDisabled; if(options.slots?.next)options.slots.next.disabled=state.nextDisabled; },
+    updateNavigationControls(state) { alive(); const focused=document.activeElement;const losingFocus=(focused===options.slots?.previous&&state.previousDisabled)||(focused===options.slots?.next&&state.nextDisabled); if(losingFocus){boardHost.tabIndex=-1;boardHost.focus({preventScroll:true});} if(options.slots?.previous)options.slots.previous.disabled=state.previousDisabled; if(options.slots?.next)options.slots.next.disabled=state.nextDisabled; },
     dispose() { if (disposed) return; disposed = true; cleanups.forEach(cleanup=>cleanup()); board!.dispose(); strip?.dispose(); owned.forEach(node => node.remove()); },
   };
 }

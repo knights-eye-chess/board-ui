@@ -36,3 +36,7 @@ native-host browser scenario separately verifies canonical branch navigation and
 live center crossings. dev.4 was an unadopted packaging iteration; dev.5 is the
 accepted immutable candidate. Qualification records/change notes follow packing;
 no runtime was repacked or overwritten. Existing archives remain unchanged.
+
+Private dev.6 additionally retains viewer focus when endpoint navigation disables
+the focused transport button. The regression covers the subsequent Home command.
+The app adopted dev.6 with workspace dev.17; dev.5 was not deployed by this task.

@@ -1,11 +1,11 @@
 {
-  "version": "0.1.0-dev.6",
-  "sourceBaseline": "8eff8b6",
+  "version": "0.1.0-dev.5",
+  "sourceBaseline": "5781f56aecf9571147569365e0497d37147121af",
   "workingTreeChangesIncluded": true,
   "node": "v24.19.0",
   "archive": {
-    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.6.tgz",
-    "sha256": "eaa166559bc2175c46c04458988b3bbd59670ae164e6d2bba2139275c6c6becc"
+    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.5.tgz",
+    "sha256": "757cea7184c73db261041ef7a623bbeb578c974f45048a87595fa1ff8bbfe969"
   },
   "tests": {
     "source": 11,
@@ -64,5 +64,5 @@
     "Real iOS/touch hardware unqualified",
     "Private preview; no public publishing or license grant"
   ],
-  "notes": "Final viewer focus-retention qualification: disabling the focused endpoint transport keeps subsequent navigation keys scoped to the viewer. Runtime/assets and 11 source/installed tests qualified; no archive overwrite."
+  "notes": "Repository qualification/change records written after immutable archive; archive includes qualified runtime/assets/API README/tests."
 }
