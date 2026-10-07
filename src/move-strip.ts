@@ -39,8 +39,12 @@ export interface MoveStripOptions {
   view: MoveStripView;
   onNavigate(cursor: MoveStripCursor, details: {source: 'click'|'scroll'|'keyboard'}): void;
   appearance?: MoveStripAppearance;
-  /** Optional app commands; only invoked by focused strip keyboard input. */
-  onCommand?: (command: 'a'|'b'|'l') => void;
+  /** Host command IDs are emitted only while a move button owns keyboard focus. */
+  onCommand?: (command: string) => void;
+  /** Keyboard key to host command ID. Defaults to a/b/l; `{}` disables commands. */
+  keymap?: Readonly<Record<string,string>>;
+  /** SAN piece-letter display. Defaults to chess figurines; `false` keeps labels literal. A map replaces only its listed letters. Copy and accessible text always use the original label. */
+  figurines?: boolean | Readonly<Record<string,string>>;
   onGestureStart?: () => void;
   onGestureEnd?: () => void;
   onUserScroll?: () => void;
@@ -94,6 +98,9 @@ function snapshot(view: MoveStripView): MoveStripView {
 export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): MoveStrip {
   if(!host || typeof options?.onNavigate!=='function')throw new TypeError('Move strip host and onNavigate are required.');
   let view=snapshot(options.view),appearance=options.appearance||{},disposed=false,blocked=false,pending=false;
+  const keymap=options.keymap??{a:'a',b:'b',l:'l'};
+  const figurines=options.figurines===false?null:options.figurines&&typeof options.figurines==='object'?options.figurines:{K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
+  function displayLabel(label:string){return figurines?label.replace(/[KQRBNP]/g,letter=>figurines[letter]??letter):label;}
   const doc=host.ownerDocument, win=doc.defaultView!;
   const originalHostStyle=host.getAttribute('style');host.style.display='block';host.style.padding='0';host.style.border='0';host.style.overflow='visible';
   const restoreHost=()=>{if(originalHostStyle===null)host.removeAttribute('style');else host.setAttribute('style',originalHostStyle);};
@@ -126,7 +133,7 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
   function fillButton(button:HTMLButtonElement,item:MoveStripItem){const wasCurrent=button.classList.contains('current');button.replaceChildren();button.className=wasCurrent?'current':'';button.removeAttribute('style');button.dataset.cursor=key(item.cursor);button.dataset.copySan=`${(item.copyPrefix||item.number||'').replace(/…/g,'...')}${item.label}`.trim();button.setAttribute('aria-label',`${item.number?item.number+' ':''}${item.label}${item.annotation?', '+item.annotation:''}${item.iconLabel?', '+item.iconLabel:''}`);if(item.comment)button.title=item.comment;else button.removeAttribute('title');
     if(item.startIconUrl){const start=doc.createElement('img');start.className='start-icon';start.src=item.startIconUrl;start.alt='';start.setAttribute('aria-hidden','true');button.append(start);}else{
       if(item.number){const number=doc.createElement('span');number.className='number';number.textContent=item.number;button.append(number);}
-      const label=doc.createElement('span');label.className='san';label.setAttribute('aria-hidden','true');label.textContent=item.label.replace(/[KQRBNP]/g,letter=>({K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'} as Record<string,string>)[letter]);button.append(label);
+      const label=doc.createElement('span');label.className='san';label.setAttribute('aria-hidden','true');label.textContent=displayLabel(item.label);button.append(label);
       if(item.annotation){const note=doc.createElement('small');note.className='annotation';note.textContent=item.annotation;button.append(note);}
     }
     const slot=doc.createElement('span');slot.className='icon-slot';slot.setAttribute('aria-hidden','true');button.append(slot);setPresentation(button,item);
@@ -157,7 +164,7 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
   listen(viewport,'wheel',()=>{beginGesture();settle();},{passive:true});
   listen(viewport,'scroll',()=>{positionBranches();if(Date.now()<programmaticUntil&&!userGesture)return;if(!userGesture||Math.abs(viewport.scrollLeft-pointerStart)<=.5&&!pointerMoved)return;pointerMoved=true;userPositioned=true;options.onUserScroll?.();if(scrollFrame)return;scrollFrame=win.requestAnimationFrame(()=>{scrollFrame=0;if(userGesture)resolveCenter();});settle();},{passive:true});
   listen(shell,'keydown',(event)=>{const keyboard=event as KeyboardEvent,target=event.target as HTMLElement;if(!target.closest('button'))return;if(keyboard.altKey||keyboard.ctrlKey||keyboard.metaKey)return;
-    if(options.onCommand&&['a','b','l'].includes(keyboard.key.toLowerCase())){keyboard.preventDefault();options.onCommand(keyboard.key.toLowerCase() as 'a'|'b'|'l');return;}
+    const command=Object.hasOwn(keymap,keyboard.key)?keymap[keyboard.key]:keymap[keyboard.key.toLowerCase()];if(options.onCommand&&command){keyboard.preventDefault();options.onCommand(command);return;}
     const line=selectedButtons(),at=line.indexOf(target as HTMLButtonElement);if(at<0)return;let next=at;if(keyboard.key==='ArrowLeft')next=Math.max(0,at-1);else if(keyboard.key==='ArrowRight')next=Math.min(line.length-1,at+1);else if(keyboard.key==='Home')next=0;else if(keyboard.key==='End')next=line.length-1;else if(keyboard.key==='Enter'||keyboard.key===' '){keyboard.preventDefault();request(view.selectedLine[at],'keyboard');return;}else return;keyboard.preventDefault();line[next]?.focus();},{passive:false});
   listen(shadow,'copy',(event)=>{const copy=event as ClipboardEvent,selection=win.getSelection();if(!copy.clipboardData||!selection||selection.isCollapsed||!selection.rangeCount)return;const range=selection.getRangeAt(0),buttonFor=(node:Node)=>((node.nodeType===1?node:node.parentElement) as Element|null)?.closest?.('button[data-copy-san]'),start=buttonFor(range.startContainer),end=buttonFor(range.endContainer);if(start&&start===end&&shadow.contains(start)){copy.clipboardData.setData('text/plain',(start as HTMLElement).dataset.copySan||'');copy.preventDefault();}},{passive:false});
   try{render(false);}catch(error){listeners.forEach(remove=>remove());owned.remove();restoreHost();throw error;}

@@ -5,7 +5,7 @@ icons, animation, interaction, and an optional moves strip. The host supplies ch
 state and handles events. No engine, classifier, game-tree implementation, account,
 or persistence service is required.
 
-Private preview `0.1.0-dev.6`; no public publication or license grant.
+Private preview `0.1.0-dev.8`; no public publication or license grant.
 See [visual contract](docs/VISUAL-CONTRACT.md) and [asset provenance](assets/README.md).
 
 ## Ownership
@@ -116,7 +116,9 @@ and strip gestures. Its API exposes board/strip updates, incremental overlays/it
 appearance, navigation-control state, centering and disposal. Optional previous/next
 slots have package-owned click/hold behavior. Navigation keys are scoped to the host,
 ignore editors/promotion dialogs, and emit commands. Without a navigation callback,
-the board retains its square keyboard controls. The optional vertical panel owns
+the board retains its square keyboard controls. Viewer `keymap` maps keys to string command IDs; `{}` disables shortcuts. Strip
+`keymap` likewise customizes a/b/l defaults; `figurines:false` preserves literal
+localized SAN, or supply a letter-to-glyph map. The optional vertical panel owns
 layout discovery/expansion, stylesheet and disposal; the host supplies outer slots.
 
 ## Styling and automation surface
@@ -138,3 +140,5 @@ Tests cover original arrow geometry, extensions, transitions, drag intent accept
 promotion, live strip scrolling, nested branches and incremental updates. Desktop
 and 375px Chromium are qualified; real iOS/touch hardware remains unqualified.
 Archives are immutable: bump the version before producing different bytes.
+
+Panel `classNames` (column/panel/viewport/expand/dialog) and `labels` (panel/viewport/expand/dialog) are optional host choices. Defaults use generic board-ui classes. Component-owned styling supports `--board-strip-line`, `--board-strip-surface`, `--board-strip-accent`, `--board-strip-text`, `--board-strip-dialog`; legacy `--line`, `--secondary`, `--green`, `--ink`, `--dialog-surface` remain fallbacks. Board drag defers an existing strip gesture; it does not cancel that gesture. Palette overrides are validated before initial painting and before an appearance update.

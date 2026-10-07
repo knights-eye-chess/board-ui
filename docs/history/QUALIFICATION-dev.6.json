@@ -1,15 +1,15 @@
 {
-  "version": "0.1.0-dev.8",
-  "sourceBaseline": "c7bacb9",
+  "version": "0.1.0-dev.6",
+  "sourceBaseline": "8eff8b6",
   "workingTreeChangesIncluded": true,
   "node": "v24.19.0",
   "archive": {
-    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.8.tgz",
-    "sha256": "4b0eb39ec6597d913c325479a37512701eaafb3fd8a06cf2200e90580628b4c2"
+    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.6.tgz",
+    "sha256": "eaa166559bc2175c46c04458988b3bbd59670ae164e6d2bba2139275c6c6becc"
   },
   "tests": {
-    "source": 14,
-    "independentlyInstalledArchive": 14,
+    "source": 11,
+    "independentlyInstalledArchive": 11,
     "failed": 0,
     "skipped": 0,
     "arrowGeometryGoldens": 18
@@ -64,5 +64,5 @@
     "Real iOS/touch hardware unqualified",
     "Private preview; no public publishing or license grant"
   ],
-  "notes": "Claude follow-ups qualified: all12 recolor templates match shipped artwork, production >=.9 arrow opacity, initial palette rejection before painting, configurable keymaps/figurines/panel classes and labels. dev.7 was an unadopted coordinate-contrast packaging iteration; this archive also includes that fix. Qualification notes follow immutable packing."
+  "notes": "Final viewer focus-retention qualification: disabling the focused endpoint transport keeps subsequent navigation keys scoped to the viewer. Runtime/assets and 11 source/installed tests qualified; no archive overwrite."
 }

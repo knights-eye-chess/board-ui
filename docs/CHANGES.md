@@ -40,3 +40,12 @@ no runtime was repacked or overwritten. Existing archives remain unchanged.
 Private dev.6 additionally retains viewer focus when endpoint navigation disables
 the focused transport button. The regression covers the subsequent Home command.
 The app adopted dev.6 with workspace dev.17; dev.5 was not deployed by this task.
+
+Private dev.8 incorporates Claude's independent review recommendations: all12
+recolor templates are tied to the shipped artwork by a sync test; ≥.9 outlined
+arrow opacity has production coverage; palette validation happens before painting;
+keymaps emit configurable string IDs and SAN figurines are optional/customizable;
+vertical panel classes, accessibility labels and documented tokens are configurable
+with generic defaults. Default coordinate contrast is corrected (dev.7 was an
+unadopted packaging iteration). Fourteen source and fourteen installed archive tests
+pass. Existing strip gestures are deferred, not canceled, when board drag begins.

@@ -63,7 +63,7 @@ const defaults = {
   pieceSets: { glossy: { pieces:defaultPieces } },
   iconSets: { quality: { icons:qualityIcons } },
   arrowStyles: DEFAULT_ARROW_STYLES,
-  squareThemes: { classic: {light:'#e9edcc',dark:'#779556',focus:'#5634ad',dialog:'#fff',dialogText:'#17221b',lastMove:'#eacb4266',selected:'#f4d35e',target:'rgba(64,69,67,.42)',coordinateLight:'#e9edcc',coordinateDark:'#779556'} },
+  squareThemes: { classic: {light:'#e9edcc',dark:'#779556',focus:'#5634ad',dialog:'#fff',dialogText:'#17221b',lastMove:'#eacb4266',selected:'#f4d35e',target:'rgba(64,69,67,.42)',coordinateLight:'#779556',coordinateDark:'#e9edcc'} },
 };
 
 function validateName(category: string, name: string) {
@@ -149,6 +149,16 @@ export function resolveAppearanceSelection(catalogue: BoardAppearanceCatalogue, 
   if (!iconSet) throw new RangeError(`Unknown icon set: ${iconSetName}`);
   if (!squareTheme) throw new RangeError(`Unknown square theme: ${squareThemeName}`);
   return {pieceSetName,iconSetName,squareThemeName,pieceSet,iconSet,squareTheme};
+}
+
+/** Check every selected name and palette override before a board or viewer paints. */
+export function validateAppearanceSelection(catalogue: BoardAppearanceCatalogue, selection: BoardAppearanceSelection & { qualityColors?: Readonly<Record<string,string>> } = {}): ResolvedAppearanceSelection {
+  const resolved=resolveAppearanceSelection(catalogue,selection);
+  for (const [id,color] of Object.entries(selection.qualityColors ?? {})) {
+    if (!Object.hasOwn(resolved.iconSet.icons,id)) throw new RangeError(`Unknown icon: ${id} in ${resolved.iconSetName}`);
+    resolveIconPresentation(catalogue,id,{iconSet:resolved.iconSetName,color});
+  }
+  return resolved;
 }
 
 export interface IconPresentationOptions { iconSet?: string; color?: string; label?: string; }

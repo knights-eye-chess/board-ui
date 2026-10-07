@@ -1,7 +1,7 @@
 import { mountControlledBoard, type ControlledBoard, type ControlledBoardOptions, type ControlledBoardState, type BoardAppearanceUpdate, type BoardOverlayUpdate } from './controlled-board.js';
 import { mountMoveStrip, type MoveStrip, type MoveStripOptions, type MoveStripView, type MoveStripCursor, type MoveStripItem } from './move-strip.js';
-import { resolveIconPresentation, resolveAppearanceSelection, defaultBoardAppearance } from './appearance.js';
-import { mountMoveStripPanel } from './move-strip-panel.js';
+import { resolveIconPresentation, resolveAppearanceSelection, validateAppearanceSelection, defaultBoardAppearance } from './appearance.js';
+import { mountMoveStripPanel, type MoveStripPanelOptions } from './move-strip-panel.js';
 
 /** Optional composite: the chess position/tree remain controlled by the host. */
 export interface BoardViewerOptions {
@@ -9,8 +9,10 @@ export interface BoardViewerOptions {
   moveStrip?: false | MoveStripOptions;
   /** Existing layout slots can be supplied without access to component internals. */
   slots?: { board: HTMLElement; moveStrip?: HTMLElement; previous?: HTMLButtonElement; next?: HTMLButtonElement };
-  moveStripPanel?: { appHost: HTMLElement; controlsHost: HTMLElement };
-  onNavigationCommand?(command: 'previous'|'next'|'branchUp'|'branchDown'|'start'|'end'|'resumeMain'|'flip'|'delete'): void;
+  moveStripPanel?: Omit<MoveStripPanelOptions,'stripHost'|'strip'>;
+  /** Host-configurable keyboard commands; {} disables viewer navigation shortcuts. */
+  keymap?: Readonly<Record<string,string>>;
+  onNavigationCommand?(command: string): void;
 }
 export interface BoardViewer {
   updateBoard(state: ControlledBoardState): void;
@@ -27,6 +29,7 @@ export interface BoardViewer {
   dispose(): void;
 }
 export function mountBoardViewer(host: HTMLElement, options: BoardViewerOptions): BoardViewer {
+  validateAppearanceSelection(options.board.appearance ?? defaultBoardAppearance,options.board.appearanceSelection);
   const document = host.ownerDocument;
   const owned: HTMLElement[] = [];
   const boardHost = options.slots?.board ?? document.createElement('div');
@@ -71,7 +74,7 @@ export function mountBoardViewer(host: HTMLElement, options: BoardViewerOptions)
     if(key.ctrlKey||key.metaKey||key.altKey)return;
     const path=key.composedPath().filter(node=>node instanceof window.Element) as Element[];
     if(path.some(node=>node.matches('input,textarea,select,[contenteditable="true"],.promotion,[role="dialog"]')))return;
-    const names: Record<string,Parameters<NonNullable<BoardViewerOptions['onNavigationCommand']>>[0]>={ArrowLeft:'previous',ArrowRight:'next',ArrowUp:'branchUp',ArrowDown:'branchDown',Home:'start',End:'end',PageUp:'resumeMain',f:'flip',Backspace:'delete',Delete:'delete'};
+    const names: Readonly<Record<string,string>>=options.keymap??{ArrowLeft:'previous',ArrowRight:'next',ArrowUp:'branchUp',ArrowDown:'branchDown',Home:'start',End:'end',PageUp:'resumeMain',f:'flip',Backspace:'delete',Delete:'delete'};
     if(!(key.key in names))return;
     key.preventDefault();key.stopPropagation();if(key.repeat&&['flip','delete'].includes(names[key.key]))return;options.onNavigationCommand!(names[key.key]);
   }, true);
@@ -81,7 +84,7 @@ export function mountBoardViewer(host: HTMLElement, options: BoardViewerOptions)
     updateStrip(view) { alive(); strip?.update(view); },
     updateBoardOverlays(group, overlay) { alive(); board!.updateOverlays(group, overlay); },
     updateStripMove(cursor, patch) { alive(); strip?.updateMove(cursor, patch); },
-    updateAppearance(appearance) { alive(); board!.updateAppearance(appearance); presentation = { ...presentation, ...appearance, qualityColors:{...presentation.qualityColors,...appearance.qualityColors} }; strip?.updateAppearance(sharedIcons()); },
+    updateAppearance(appearance) { alive(); validateAppearanceSelection(catalogue,{...presentation,...appearance,qualityColors:{...presentation.qualityColors,...appearance.qualityColors}});board!.updateAppearance(appearance); presentation = { ...presentation, ...appearance, qualityColors:{...presentation.qualityColors,...appearance.qualityColors} }; strip?.updateAppearance(sharedIcons()); },
     setGestureBlocked(blocked) { alive(); strip?.setGestureBlocked(blocked); },
     cancelBoardGesture() { alive(); board!.cancelGesture(); },
     centerStrip() { alive(); strip?.center(); },

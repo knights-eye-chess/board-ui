@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { boardSquareCenter } from '../dist/controlled-board-renderer.js';
-import { createBoardAppearance, defaultBoardAppearance, DEFAULT_QUALITY_COLORS, DEFAULT_QUALITY_DEFINITIONS, resolveAppearanceAsset, resolveAppearanceSelection, resolveIconPresentation } from '../dist/appearance.js';
+import { createBoardAppearance, defaultBoardAppearance, DEFAULT_QUALITY_COLORS, DEFAULT_QUALITY_DEFINITIONS, resolveAppearanceAsset, resolveAppearanceSelection, resolveIconPresentation, validateAppearanceSelection } from '../dist/appearance.js';
 import { ARROW_STYLE_SLIM, ARROW_STYLE_BROAD, ARROW_STYLE_ROUNDED, DEFAULT_ARROW_STYLES, renderArrowSvg } from '../dist/arrows.js';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -33,6 +33,19 @@ test('all default arrow paths match production geometry goldens', () => {
       assert.equal(Boolean(layers[0].outline),index!==1);
     }
   }
+});
+
+test('production outlined-arrow opacity branch at .9 and above', () => {
+  const from=boardSquareCenter('e2','white'),to=boardSquareCenter('e4','white');
+  const geometry={from,to,unit:{x:0,y:-1},weight:1,color:'#5ab859',opacity:1,outlineOpacity:.92};
+  const expectedPath=productionPaths[0][3];
+  for (const [style,index] of [[ARROW_STYLE_SLIM,0],[ARROW_STYLE_ROUNDED,2]]) {
+    const painted=DEFAULT_ARROW_STYLES[style](geometry).layers[0];
+    assert.equal(hash(painted.d),expectedPath[index],style);
+    assert.equal(painted.fillOpacity,.6,style);
+    assert.deepEqual(painted.outline,{color:'#fff',opacity:.92,width:.55,maskInterior:true});
+  }
+  assert.equal(DEFAULT_ARROW_STYLES[ARROW_STYLE_BROAD](geometry).layers[0].fillOpacity,.46);
 });
 
 function fakeDocument() {
@@ -83,6 +96,20 @@ test('default assets, labels, palette and provenance match the imported artwork'
   assert.doesNotMatch(decodeURIComponent(recolored.src),/aria-label=/);
 });
 
+test('all twelve recolored icon data URLs preserve shipped SVG artwork', () => {
+  const replacement='#123abc';
+  const normalize=svg => svg.replace(/\srole="[^"]*"/g,'').replace(/\saria-label="[^"]*"/g,'').trimEnd();
+  for (const item of DEFAULT_QUALITY_DEFINITIONS) {
+    const shipped=normalize(readFileSync(new URL(`../assets/icons/${item.file}`,import.meta.url),'utf8'));
+    const expected=shipped.replace(`fill="${item.color}"`,`fill="${replacement}"`);
+    assert.notEqual(expected,shipped,`${item.file} must contain its palette fill`);
+    const presentation=resolveIconPresentation(defaultBoardAppearance,item.name,{color:replacement});
+    assert.match(presentation.src,/^data:image\/svg\+xml,/);
+    const actual=normalize(decodeURIComponent(presentation.src.slice('data:image/svg+xml,'.length)));
+    assert.equal(actual,expected,`${item.name} artwork diverged from ${item.file}`);
+  }
+});
+
 test('named extensions validate complete sets, duplicate names and selected names', () => {
   const pieces=defaultBoardAppearance.pieceSets.glossy.pieces;
   const catalogue=createBoardAppearance({pieceSets:{custom:{pieces:{...pieces}}},iconSets:{marks:{icons:{spark:{asset:'/spark.svg',label:'Spark'}}}},squareThemes:{ocean:{light:'#e4e8e0',dark:'#42719a'}},arrowStyles:{'my-wave':()=>({layers:[{d:'M 0 0 L 1 1',fill:'red',fillOpacity:1}]})}});
@@ -94,4 +121,10 @@ test('named extensions validate complete sets, duplicate names and selected name
   assert.throws(()=>resolveIconPresentation(catalogue,'spark',{iconSet:'marks',color:'#ff0000'}),/cannot be recolored/);
   assert.throws(()=>resolveIconPresentation(catalogue,'best',{color:'red'}),/Invalid icon color/);
   assert.throws(()=>resolveAppearanceSelection(catalogue,{iconSet:'unknown'}),/Unknown icon set/);
+  assert.equal(validateAppearanceSelection(catalogue,{iconSet:'quality',qualityColors:{best:'#123abc'}}).iconSetName,'quality');
+  assert.throws(()=>validateAppearanceSelection(catalogue,{qualityColors:{best:'red'}}),/Invalid icon color/);
+  assert.throws(()=>validateAppearanceSelection(catalogue,{qualityColors:{missing:'#123abc'}}),/Unknown icon/);
+  assert.throws(()=>validateAppearanceSelection(catalogue,{iconSet:'marks',qualityColors:{spark:'#123abc'}}),/cannot be recolored/);
 });
+
+test('default coordinate colors contrast with their squares',()=>{const theme=createBoardAppearance().squareThemes.classic;assert.equal(theme.coordinateLight,theme.dark);assert.equal(theme.coordinateDark,theme.light);});
