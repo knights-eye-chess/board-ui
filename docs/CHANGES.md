@@ -76,3 +76,13 @@ range clamping exposed stale translated branch positions; synchronously realign
 those overlays on clamp before subsequent measurement to avoid double shrinking.
 Source and ordinary-installed archive tests14/14 and desktop/mobile Chromium pass.
 Qualification notes follow immutable packing.
+
+## Private dev.14: observe actual late text metrics
+
+Authenticated saved-game verification found a7.6px center drift after text widths
+changed without a font-loading event. A component-owned ResizeObserver tracks
+button widths, rebuilding only for real metric changes with the same positioning
+and gesture rules. Observer targets reset with rebuilt buttons and disconnect on
+disposal. Regression changes real widths without dispatching loadingdone; installed
+native-host desktop/mobile scenarios do the same. Source14/14, installed14/14 and
+component Chromium matrix pass. Qualification notes follow immutable packing.

@@ -113,6 +113,9 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
   function listen(target:EventTarget,name:string,handler:EventListener,opts?:AddEventListenerOptions){target.addEventListener(name,handler,opts);listeners.push(()=>target.removeEventListener(name,handler,opts));}
   let pointerId:number|null=null,pointerStart=0,pointerMoved=false,overlayDragX:number|null=null,suppressClick=false,userGesture=false,userPositioned=false,scrollFrame=0,settleTimer=0,programmaticUntil=0,scrollCallback=false,lastRequested='',renderPending=false;
   const branchRows:Record<string,number>={},branchLanes:HTMLElement[]=[];
+  const metricWidths=new WeakMap<Element,number>();
+  const metricObserver=typeof win.ResizeObserver==='function'?new win.ResizeObserver(entries=>{let changed=false;for(const entry of entries){const width=entry.target.getBoundingClientRect().width,previous=metricWidths.get(entry.target);metricWidths.set(entry.target,width);if(previous!==undefined&&Math.abs(width-previous)>.25)changed=true;}if(changed)render(userPositioned);}):null;
+  function observeMetrics(){metricObserver?.disconnect();for(const button of buttons.values()){metricWidths.set(button,button.getBoundingClientRect().width);metricObserver?.observe(button);}}
   function positionBranches(){for(const lane of branchLanes)lane.style.transform=`translateX(${-viewport.scrollLeft}px)`;}
   function clearTimer(){win.clearTimeout(settleTimer);settleTimer=0;}
   function centerOf(button:HTMLElement){const r=button.getBoundingClientRect();return r.left+r.width/2;}
@@ -153,7 +156,7 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
     function appendBranch(branch:MoveStripBranch){if(visited.has(branch.id))return;visited.add(branch.id);ordered.push(branch);for(const child of branches)if(child.parentId===branch.id)appendBranch(child);}
     for(const branch of branches)if(!branch.parentId||!branches.some(candidate=>candidate.id===branch.parentId))appendBranch(branch);for(const branch of branches)appendBranch(branch);
     const rows=new Map<string,number>();for(const branch of ordered){const lane=doc.createElement('div');lane.className='row branch';lane.dataset.branchId=branch.id;const parentRow=branch.parentId?rows.get(branch.parentId)||0:0;row=Math.max(row,parentRow+1);rows.set(branch.id,row);lane.style.top=`${row*42}px`;lane.style.transform=`translateX(${-viewport.scrollLeft}px)`;for(const item of branch.moves)lane.append(makeButton(item));overlay.append(lane);const anchor=buttons.get(key(branch.anchor)),firstBranch=lane.querySelector('button');if(anchor&&firstBranch){const origin=viewport.getBoundingClientRect().left;lane.style.left=`${Math.max(0,centerOf(anchor)-origin+viewport.scrollLeft-firstBranch.getBoundingClientRect().width/2)}px`;}branchRows[branch.id]=lane.getBoundingClientRect().top;branchLanes.push(lane);row++;}
-    content.style.height=`${Math.max(36,row===1?36:row*42)}px`;showCurrent();lockRange();if(preserveScroll)viewport.scrollLeft=Math.min(oldScroll,Math.max(0,viewport.scrollWidth-viewport.clientWidth));else centerCurrent();positionBranches();if(focused)buttons.get(focused)?.focus({preventScroll:true});notifyLayout();}
+    content.style.height=`${Math.max(36,row===1?36:row*42)}px`;showCurrent();lockRange();if(preserveScroll)viewport.scrollLeft=Math.min(oldScroll,Math.max(0,viewport.scrollWidth-viewport.clientWidth));else centerCurrent();positionBranches();if(focused)buttons.get(focused)?.focus({preventScroll:true});observeMetrics();notifyLayout();}
   function items(value:MoveStripView){return [...value.main,...(value.branches||[]).flatMap(branch=>branch.moves)];}
   function sameStructure(a:MoveStripView,b:MoveStripView){return a.main.map(item=>key(item.cursor)).join('|')===b.main.map(item=>key(item.cursor)).join('|')&&JSON.stringify(a.branches?.map(branch=>[branch.id,branch.parentId,key(branch.anchor),branch.moves.map(item=>key(item.cursor))]))===JSON.stringify(b.branches?.map(branch=>[branch.id,branch.parentId,key(branch.anchor),branch.moves.map(item=>key(item.cursor))]));}
   function sameText(a:MoveStripItem,b:MoveStripItem){return a.label===b.label&&a.number===b.number&&a.copyPrefix===b.copyPrefix&&a.annotation===b.annotation&&a.startIconUrl===b.startIconUrl;}
@@ -183,6 +186,6 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
     getCurrentBounds(){const identity=key(view.current),button=buttons.get(identity);return button?{key:identity,rect:button.getBoundingClientRect()}:null;},
     subscribe(listener){if(disposed)throw new Error('Move strip is disposed.');subscribers.add(listener);return ()=>subscribers.delete(listener);},
     relayout(){if(disposed)throw new Error('Move strip is disposed.');render(userPositioned);},
-    dispose(){if(disposed)return;disposed=true;resizeObserver?.disconnect();clearTimer();if(scrollFrame)win.cancelAnimationFrame(scrollFrame);listeners.forEach(remove=>remove());owned.remove();buttons.clear();subscribers.clear();restoreHost();}
+    dispose(){if(disposed)return;disposed=true;resizeObserver?.disconnect();metricObserver?.disconnect();clearTimer();if(scrollFrame)win.cancelAnimationFrame(scrollFrame);listeners.forEach(remove=>remove());owned.remove();buttons.clear();subscribers.clear();restoreHost();}
   };
 }

@@ -1,11 +1,11 @@
 {
-  "version": "0.1.0-dev.13",
-  "sourceBaseline": "b7c797b",
+  "version": "0.1.0-dev.14",
+  "sourceBaseline": "0c797b5",
   "workingTreeChangesIncluded": true,
   "node": "v24.19.0",
   "archive": {
-    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.13.tgz",
-    "sha256": "fe80cfc768f772c01cf2f12e8999aae9d7f255a2d0b52958de8b4a1f315c6826"
+    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.14.tgz",
+    "sha256": "ef4185b0332589a7b65708f0fff5d69fc4bb8bd81c9fca164ab661f2ffd4d898"
   },
   "tests": {
     "source": 14,
@@ -17,7 +17,7 @@
   "browser": {
     "node": "v24.19.0",
     "engine": "Chromium /usr/bin/chromium",
-    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.13",
+    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.14",
     "results": [
       {
         "width": 1280,
@@ -64,5 +64,5 @@
     "Real iOS/touch hardware unqualified",
     "Private preview; no public publishing or license grant"
   ],
-  "notes": "Controlled recenter returns positioning ownership, preserving centering through subsequent real font metric changes. Range clamping realigns branch overlays synchronously before remeasurement. 14 source and14 ordinary-installed archive tests plus desktop/mobile Chromium pass."
+  "notes": "Observe actual button metrics as well as fonts/viewport events; controlled layout/font/theme changes without FontFaceSet events recenter, active gestures defer. Source14/14, installed14/14, desktop/mobile Chromium pass."
 }
