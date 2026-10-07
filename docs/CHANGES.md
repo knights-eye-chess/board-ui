@@ -58,3 +58,11 @@ shortcuts (including uppercase variants) are verified against installed archives
 dev.9/dev.10 were unadopted private qualification iterations; accepted archive
 bytes remain immutable. Fourteen source and fourteen ordinary-installed archive
 tests and both Chromium viewports pass.
+
+## Private dev.12: preserve current centering through layout
+
+Resize, panel relayout and font loading recenter the controlled current move until
+user scrolling takes ownership. Active or manually positioned gestures retain
+their scroll position. Added resize/font-center and held-font regression coverage.
+Source and ordinary-installed dev.12 archive tests pass14/14; Chromium desktop
+and375px matrix passes. Qualification notes were recorded after immutable packing.

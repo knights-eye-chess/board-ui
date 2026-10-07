@@ -1,11 +1,11 @@
 {
-  "version": "0.1.0-dev.11",
-  "sourceBaseline": "efc6e0a",
+  "version": "0.1.0-dev.12",
+  "sourceBaseline": "93ec443",
   "workingTreeChangesIncluded": true,
   "node": "v24.19.0",
   "archive": {
-    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.11.tgz",
-    "sha256": "bf33bc1076f64d62c7220c04e6a8b3f362b7e8c56afc1e940223ba5772b8222d"
+    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.12.tgz",
+    "sha256": "d685a07787bd91011bbd19f84c1e138d23f0669a68c31c9dbab0523029aa3889"
   },
   "tests": {
     "source": 14,
@@ -17,7 +17,7 @@
   "browser": {
     "node": "v24.19.0",
     "engine": "Chromium /usr/bin/chromium",
-    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.11",
+    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.12",
     "results": [
       {
         "width": 1280,
@@ -64,5 +64,5 @@
     "Real iOS/touch hardware unqualified",
     "Private preview; no public publishing or license grant"
   ],
-  "notes": "Final archive includes host-defined command repeat policy with safe transport-only defaults and persistent tagged highlights across position rebuilds. 14 source and 14 ordinary-installed archive tests plus desktop/mobile Chromium pass. Qualification records follow immutable packing."
+  "notes": "Resize, relayout and late font loading center controlled current before user scrolling, while preserving held or user-positioned gestures. Source and ordinary-installed archive 14/14 tests and desktop/mobile Chromium pass."
 }
