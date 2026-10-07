@@ -192,7 +192,6 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
       entries.push({element:tree,left:anchor&&first?Math.round(textLeft(anchor)-textLeft(first)):Math.max(0,main.scrollWidth-60),width:tree.offsetWidth,height:tree.offsetHeight});
     }
     entries.sort((a,b)=>a.left-b.left||b.width-a.width);
-    showCurrent();
     const gapButton=main.querySelector<HTMLElement>('button.current')||main.querySelector<HTMLElement>('button:not(:has(.start-icon))')||main.querySelector<HTMLElement>('button'),rootTop=gapButton?gapButton.getBoundingClientRect().bottom-area.getBoundingClientRect().top+4:0;
     let maxBottom=0,maxRight=main.scrollWidth;
     for(const entry of entries){const top=packedTop(entry,occupied,rootTop),right=entry.left+entry.width,bottom=top+entry.height;entry.element.style.left=`${entry.left}px`;entry.element.style.top=`${top}px`;occupied.push({left:entry.left,right,top,bottom});maxBottom=Math.max(maxBottom,bottom);maxRight=Math.max(maxRight,right+half);}

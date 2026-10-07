@@ -1,11 +1,11 @@
 {
-  "version": "0.1.0-dev.18",
-  "sourceBaseline": "95100c2",
+  "version": "0.1.0-dev.19",
+  "sourceBaseline": "7a0226d",
   "workingTreeChangesIncluded": true,
   "node": "v24.19.0",
   "archive": {
-    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.18.tgz",
-    "sha256": "28611a7b3055cbe3653d31c9c810afa442237e824e8f5677dd0ab61ddc4f1c77"
+    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.19.tgz",
+    "sha256": "b9d9bfa8165736da5447b3b55237a3548ba5e2415303277c2dc39ebdfc022230"
   },
   "tests": {
     "source": 15,
@@ -17,7 +17,7 @@
   "browser": {
     "node": "v24.19.0",
     "engine": "Chromium /usr/bin/chromium",
-    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.18",
+    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.19",
     "results": [
       {
         "nativeTouch": true,
@@ -40,5 +40,6 @@
     "Private preview; no public publishing or license grant",
     "Original-vs-native app parity receipt is qualified by the compatible app release"
   ],
-  "notes": "Native range includes viewport padding and half the outer/client difference, matching the measured outer midpoint. Regression verifies actual native range and stable valid offsets on unchanged-cursor refresh with explicit border/vertical scrollbar. Source14/14, installed14/14 and desktop/mobile Chromium pass; native integration passes same-cursor endpoint checks. Notes follow immutable packing."
+  "notes": "Native range includes viewport padding and half the outer/client difference, matching the measured outer midpoint. Regression verifies actual native range and stable valid offsets on unchanged-cursor refresh with explicit border/vertical scrollbar. Source14/14, installed14/14 and desktop/mobile Chromium pass; native integration passes same-cursor endpoint checks. Notes follow immutable packing.",
+  "correction": "Restore measured original root gap after dev.18 candidate comparison caught a 2px branch offset. Mobile border restoration retained."
 }
