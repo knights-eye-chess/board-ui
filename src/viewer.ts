@@ -12,6 +12,10 @@ export interface BoardViewerOptions {
   moveStripPanel?: Omit<MoveStripPanelOptions,'stripHost'|'strip'>;
   /** Host-configurable keyboard commands; {} disables viewer navigation shortcuts. */
   keymap?: Readonly<Record<string,string>>;
+  /** Only these command IDs may repeat; defaults to the transport commands. */
+  repeatableCommands?: readonly string[];
+  /** Explicit denial takes precedence over repeatableCommands. */
+  nonRepeatingCommands?: readonly string[];
   onNavigationCommand?(command: string): void;
 }
 export interface BoardViewer {
@@ -76,7 +80,7 @@ export function mountBoardViewer(host: HTMLElement, options: BoardViewerOptions)
     if(path.some(node=>node.matches('input,textarea,select,[contenteditable="true"],.promotion,[role="dialog"]')))return;
     const names: Readonly<Record<string,string>>=options.keymap??{ArrowLeft:'previous',ArrowRight:'next',ArrowUp:'branchUp',ArrowDown:'branchDown',Home:'start',End:'end',PageUp:'resumeMain',f:'flip',Backspace:'delete',Delete:'delete'};
     if(!(key.key in names))return;
-    key.preventDefault();key.stopPropagation();if(key.repeat&&['flip','delete'].includes(names[key.key]))return;options.onNavigationCommand!(names[key.key]);
+    key.preventDefault();key.stopPropagation();if(key.repeat&&((options.nonRepeatingCommands??[]).includes(names[key.key])||!(options.repeatableCommands??['previous','next','branchUp','branchDown','start','end']).includes(names[key.key])))return;options.onNavigationCommand!(names[key.key]);
   }, true);
   const alive = () => { if (disposed) throw new Error('Board viewer is disposed.'); };
   return {

@@ -49,3 +49,12 @@ vertical panel classes, accessibility labels and documented tokens are configura
 with generic defaults. Default coordinate contrast is corrected (dev.7 was an
 unadopted packaging iteration). Fourteen source and fourteen installed archive tests
 pass. Existing strip gestures are deferred, not canceled, when board drag begins.
+
+Private dev.11 is the final headless candidate. Viewer command repeat is safe by
+default: only transport command IDs repeat, with explicit host allow/deny APIs.
+Custom destructive command IDs cannot auto-repeat accidentally. Tagged highlights
+survive position rebuilds and controlled overlay inputs are copied. Native host
+shortcuts (including uppercase variants) are verified against installed archives.
+dev.9/dev.10 were unadopted private qualification iterations; accepted archive
+bytes remain immutable. Fourteen source and fourteen ordinary-installed archive
+tests and both Chromium viewports pass.

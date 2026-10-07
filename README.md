@@ -5,7 +5,7 @@ icons, animation, interaction, and an optional moves strip. The host supplies ch
 state and handles events. No engine, classifier, game-tree implementation, account,
 or persistence service is required.
 
-Private preview `0.1.0-dev.8`; no public publication or license grant.
+Private preview `0.1.0-dev.10`; no public publication or license grant.
 See [visual contract](docs/VISUAL-CONTRACT.md) and [asset provenance](assets/README.md).
 
 ## Ownership
@@ -116,7 +116,7 @@ and strip gestures. Its API exposes board/strip updates, incremental overlays/it
 appearance, navigation-control state, centering and disposal. Optional previous/next
 slots have package-owned click/hold behavior. Navigation keys are scoped to the host,
 ignore editors/promotion dialogs, and emit commands. Without a navigation callback,
-the board retains its square keyboard controls. Viewer `keymap` maps keys to string command IDs; `{}` disables shortcuts. Strip
+the board retains its square keyboard controls. Viewer `keymap` maps keys to string command IDs; `repeatableCommands` permits auto-repeat (defaults to transport commands only), and `nonRepeatingCommands` explicitly denies chosen IDs; custom commands do not repeat by default; `{}` disables shortcuts. Strip
 `keymap` likewise customizes a/b/l defaults; `figurines:false` preserves literal
 localized SAN, or supply a letter-to-glyph map. The optional vertical panel owns
 layout discovery/expansion, stylesheet and disposal; the host supplies outer slots.
