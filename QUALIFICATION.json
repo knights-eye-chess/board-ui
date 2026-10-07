@@ -1,11 +1,11 @@
 {
-  "version": "0.1.0-dev.16",
-  "sourceBaseline": "3bc8c2a",
+  "version": "0.1.0-dev.17",
+  "sourceBaseline": "7476db2",
   "workingTreeChangesIncluded": true,
   "node": "v24.19.0",
   "archive": {
-    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.16.tgz",
-    "sha256": "27a00fb8cc55612e3627dceb5dc5666917be36e89ddd4faa1ba7a0c42d95eb54"
+    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.17.tgz",
+    "sha256": "6cc299dec79d792d0852422f168b0dcedf768d84a48c145ca0c8a30a2d7dd1b0"
   },
   "tests": {
     "source": 14,
@@ -17,7 +17,7 @@
   "browser": {
     "node": "v24.19.0",
     "engine": "Chromium /usr/bin/chromium",
-    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.16",
+    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.17",
     "results": [
       {
         "width": 1280,
@@ -64,5 +64,5 @@
     "Real iOS/touch hardware unqualified",
     "Private preview; no public publishing or license grant"
   ],
-  "notes": "Range clamping includes viewport padding, preserving selected-endpoint centering on an unchanged-cursor refresh. Source14/14, installed14/14 and desktop/mobile Chromium pass; native integrated browser verifies the same refresh. Separate metric-event correction remains. Release notes recorded after immutable packing."
+  "notes": "Native range includes viewport padding and half the outer/client difference, matching the measured outer midpoint. Regression verifies actual native range and stable valid offsets on unchanged-cursor refresh with explicit border/vertical scrollbar. Source14/14, installed14/14 and desktop/mobile Chromium pass; native integration passes same-cursor endpoint checks. Notes follow immutable packing."
 }

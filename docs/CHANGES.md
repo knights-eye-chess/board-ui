@@ -98,3 +98,13 @@ ordinary-installed archive and real native-host desktop/mobile checks pass.
 The independent event-free metric fix from dev.14 remains valid. Preview README
 now uses the manifest as version authority. Dev.15 was an unadopted staging pack.
 Qualification notes follow immutable packing.
+
+## Private dev.17: qualify real range and border/scrollbar geometry
+
+Regression captures actual scrollWidth-clientWidth and asserts unchanged-cursor
+refresh never lowers a valid offset. Repeat with3px borders and forced vertical
+scrollbar. Since centering uses the outer rectangle midpoint, content-end sizing
+subtracts half the offsetWidth-clientWidth difference, rather than the full term.
+Source14/14, installed14/14 and Chromium desktop/mobile pass. Default app viewport
+has no border; this additional term fix preserves its dev.16 geometry. Notes were
+recorded after immutable packing.
