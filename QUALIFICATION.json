@@ -1,176 +1,68 @@
 {
-  "version": "0.1.0-dev.3",
-  "sourceBaseline": "c7ec5adc36c67a09074a7ed2db077f3f84b9c55e",
+  "version": "0.1.0-dev.5",
+  "sourceBaseline": "5781f56aecf9571147569365e0497d37147121af",
+  "workingTreeChangesIncluded": true,
   "node": "v24.19.0",
-  "sourceHashes": [
-    {
-      "path": ".github/workflows/quality.yml",
-      "sha256": "fe9d10c4d253ec8025941205b82a48dd633dd62609681ce78ed4ab392eae4f05"
-    },
-    {
-      "path": ".gitignore",
-      "sha256": "407fc2fba17e119b628ef35c95d702948106f056b47b9c196a07a6b8de1ceb9e"
-    },
-    {
-      "path": "AGENTS.md",
-      "sha256": "4cbea767f7905f577d90fef443ee663c96be49e9d418863343ca87e33c1effeb"
-    },
-    {
-      "path": "README.md",
-      "sha256": "d30dead19b62a73590568395b8f1178506daf868213ef85d2ad65afd736aedeb"
-    },
-    {
-      "path": "SOURCE-ORIGIN.json",
-      "sha256": "1f45e61d29b8620e88966296c17c2970585fe121c356135ed73644b6960af78e"
-    },
-    {
-      "path": "assets/PIECES.json",
-      "sha256": "096bf28588ccc1e3281815c325e038d2f7f14c1c32d7158fe3dce5edac3b3bc7"
-    },
-    {
-      "path": "assets/README.md",
-      "sha256": "14999f9c662ae4eea48ae575ebfb6c506edb22f3b5c3af1a1272798676821cc6"
-    },
-    {
-      "path": "assets/pieces/bb.png",
-      "sha256": "f921f223a6aee7284e8281bd1c27d1f611fe1f66fb9feffdeee80c6a932dd846"
-    },
-    {
-      "path": "assets/pieces/bk.png",
-      "sha256": "ca9beeb9c199ca9d03599559b7485f7311b91652d67c2ec9f6aae6ab49ba6cda"
-    },
-    {
-      "path": "assets/pieces/bn.png",
-      "sha256": "33faddc4ee729ef4d5927d182c80bb6f55848b3af1d5986e49b3dd6a199237f0"
-    },
-    {
-      "path": "assets/pieces/bp.png",
-      "sha256": "99d8d5d334387992ebf0ea44c15787d8c8ca801719eff2fc6bd2d78f62a7a26b"
-    },
-    {
-      "path": "assets/pieces/bq.png",
-      "sha256": "a10b6f2d80adda1e3a70a6f89300f6a86e9e4ae1f7b795c41cf7fd17514eafe1"
-    },
-    {
-      "path": "assets/pieces/br.png",
-      "sha256": "9431b6baa99f3c9c6b3281e02340ddc0a2c0ee96baa1f6b556c9a00e25bd7500"
-    },
-    {
-      "path": "assets/pieces/wb.png",
-      "sha256": "e3d197179c6c1f94f8a8f00d31c0e57d61f64ca6c458b261178d4aeeeadc56f1"
-    },
-    {
-      "path": "assets/pieces/wk.png",
-      "sha256": "06ee293d14c52e221181979f4b11c20878b44e9bccf590e14413a85f15108292"
-    },
-    {
-      "path": "assets/pieces/wn.png",
-      "sha256": "4bad2d77893978405ef673077125eff5c54b8652dc443b01b88faf444890e4d5"
-    },
-    {
-      "path": "assets/pieces/wp.png",
-      "sha256": "c13497ab882490dc66680ff15ce4eb37fcbc76633c98c297dde6abb4e188158d"
-    },
-    {
-      "path": "assets/pieces/wq.png",
-      "sha256": "d79b4951784e3b5ed53a2ad3a187acfab7193a8599c3ca58c1a8ef0bc9de9348"
-    },
-    {
-      "path": "assets/pieces/wr.png",
-      "sha256": "1a078a732bc066c9b51cdab2af507828cdf88af88731d2bee1500d831ff5c6d3"
-    },
-    {
-      "path": "browser-results.json",
-      "sha256": "11b9a9c0039d641f33a55b4f9733fc5f00ab89d2dca29dfd9991f7a6dfd71356"
-    },
-    {
-      "path": "build.mjs",
-      "sha256": "4e956b0708a48d62ad94a298ab7aedf11d3e57dc4c7f3ee788c241cb03498169"
-    },
-    {
-      "path": "docs/CHANGES.md",
-      "sha256": "b411a73a81846be7ddbc40c5459a5a1eeaf940c8eeca73cfe03f9f50bd94301d"
-    },
-    {
-      "path": "docs/WORKLOG.json",
-      "sha256": "5954177d8872d1d23bed7931ef77bfc76faad8d7857c30ee8d59315c806e783a"
-    },
-    {
-      "path": "docs/history/QUALIFICATION-dev.2.json",
-      "sha256": "7d8adac33e385b4bfa62f8c841a42cb459476f4d15977708bc2a917112efce5e"
-    },
-    {
-      "path": "docs/screenshots/board.png",
-      "sha256": "05fc291580fba6f91bc03380468b320ef99df2649703b54e9c98c53bf3c2e4fe"
-    },
-    {
-      "path": "examples/capture-screenshot.mjs",
-      "sha256": "804b994f76520f345eb9c74bffee13e827877dc033629f2447cdc7dc40aae9c1"
-    },
-    {
-      "path": "examples/standalone.html",
-      "sha256": "7c9b0603b59cb8affba79d252f46864e0f73ca7c17a8537df2e503d23b8b4c7d"
-    },
-    {
-      "path": "npm-shrinkwrap.json",
-      "sha256": "239e18b9d4a63b6e5bb2c09246c9968e19b00d203b0257503fb28d871e15b3f7"
-    },
-    {
-      "path": "package.json",
-      "sha256": "a9f8f0e36c7839aa5177b825fe80659a0332988d23b827c6db1e9adf17e13c2c"
-    },
-    {
-      "path": "scripts/pack.mjs",
-      "sha256": "4acea39a16b814ab12fa59983e028a80cdd6cb5f128f308a8cdc184b0a78910b"
-    },
-    {
-      "path": "scripts/update-dependency.mjs",
-      "sha256": "c398519a64ccd3770af24bfdd353364e9bde5a477ae3d5ed2a54f66e279c15d6"
-    },
-    {
-      "path": "src/controlled-board-renderer.ts",
-      "sha256": "27e1409660a89ede50e5620adcd0d78d4bfd733f363f5404888b88aa9fabec8f"
-    },
-    {
-      "path": "src/controlled-board.ts",
-      "sha256": "f76a7318927b07585fd84eba06f87b58ac723c7d68148ddf2581eaa1f4ab3c6b"
-    },
-    {
-      "path": "tests/browser-check.mjs",
-      "sha256": "1a34e3dffd5513aff6b3acd406f525119b0a0076735e383c81049e8af5489de8"
-    },
-    {
-      "path": "tests/controlled-board.test.mjs",
-      "sha256": "cd3cf06c5ce508a10a7e517dfffa5a2a3d419526e2017cc0908af164438c254a"
-    }
-  ],
-  "build": true,
-  "unitTestsPassed": 3,
-  "browserEvidence": "browser-results.json",
-  "browserViewports": [
-    1280,
-    375
-  ],
-  "freshConsumerInstall": true,
-  "assetExportsVerified": 12,
-  "assetsByteIdenticalToSource": true,
-  "runtimeByteIdenticalToDev2": true,
-  "screenshot": {
-    "file": "docs/screenshots/board.png",
-    "squares": 64,
-    "loadedSprites": 32,
-    "errors": 0,
-    "sha256": "05fc291580fba6f91bc03380468b320ef99df2649703b54e9c98c53bf3c2e4fe"
+  "archive": {
+    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.5.tgz",
+    "sha256": "757cea7184c73db261041ef7a623bbeb578c974f45048a87595fa1ff8bbfe969"
   },
-  "artifact": {
-    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.3.tgz",
-    "sha256": "75bff823ce16ab5b3a89c1d1098832ec3733a92e55d41420c1d7a4f0d1b924ff",
-    "private": true
+  "tests": {
+    "source": 11,
+    "independentlyInstalledArchive": 11,
+    "failed": 0,
+    "skipped": 0,
+    "arrowGeometryGoldens": 18
   },
-  "artifactNote": "Accepted archive packed before final repository-only change log, worklog and README pointer; runtime/assets/screenshot and usage docs qualified. Previous bytes unchanged.",
+  "browser": {
+    "node": "v24.19.0",
+    "engine": "Chromium /usr/bin/chromium",
+    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.5",
+    "results": [
+      {
+        "width": 1280,
+        "squares": 64,
+        "click": true,
+        "drag": true,
+        "keyboard": true,
+        "promotionCancel": true,
+        "underpromotion": "a7a8n",
+        "flippedPromotion": true,
+        "focusTrap": true,
+        "permissionRevocation": true,
+        "arbitraryOverlay": true,
+        "focusRetention": true,
+        "multiInstance": true,
+        "disposal": true,
+        "errors": []
+      },
+      {
+        "width": 375,
+        "squares": 64,
+        "click": true,
+        "drag": true,
+        "keyboard": true,
+        "promotionCancel": true,
+        "underpromotion": "a7a8n",
+        "flippedPromotion": true,
+        "focusTrap": true,
+        "permissionRevocation": true,
+        "arbitraryOverlay": true,
+        "focusRetention": true,
+        "multiInstance": true,
+        "disposal": true,
+        "errors": []
+      }
+    ]
+  },
+  "consumer": {
+    "ordinaryNpmInstall": true,
+    "sourceAliases": false,
+    "symlinks": false
+  },
   "limits": [
-    "No website artifact adoption/deployment",
-    "No public release or new artwork license decision",
-    "Real touch devices/iOS unqualified"
-  ]
+    "Real iOS/touch hardware unqualified",
+    "Private preview; no public publishing or license grant"
+  ],
+  "notes": "Repository qualification/change records written after immutable archive; archive includes qualified runtime/assets/API README/tests."
 }

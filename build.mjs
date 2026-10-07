@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdirSync, writeFileSync, rmSync, readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
@@ -7,8 +7,9 @@ import path from 'node:path';
 const root = fileURLToPath(new URL('./', import.meta.url));
 const out = path.join(root, 'dist');
 rmSync(out, { recursive:true, force:true }); mkdirSync(out, { recursive:true });
-const result = await build({ entryPoints:[path.join(root,'src/controlled-board.ts'),path.join(root,'src/controlled-board-renderer.ts')], bundle:false, format:'esm', platform:'browser', target:'es2022', outdir:out, metafile:true });
-const config = { compilerOptions:{ declaration:true, emitDeclarationOnly:true, strict:true, target:'ES2022', module:'ESNext', moduleResolution:'Bundler', lib:['ES2022','DOM'], types:[], skipLibCheck:true, rootDir:path.join(root,'src'), outDir:out }, files:[path.join(root,'src/controlled-board.ts')] };
+const entries = readdirSync(path.join(root,'src')).filter(name=>name.endsWith('.ts')).map(name=>path.join(root,'src',name));
+const result = await build({ entryPoints:entries, bundle:false, format:'esm', platform:'browser', target:'es2022', outdir:out, metafile:true });
+const config = { compilerOptions:{ declaration:true, emitDeclarationOnly:true, strict:true, target:'ES2022', module:'ESNext', moduleResolution:'Bundler', lib:['ES2022','DOM'], types:[], skipLibCheck:true, rootDir:path.join(root,'src'), outDir:out }, files:entries };
 const configFile=path.join(out,'declarations.json');writeFileSync(configFile,JSON.stringify(config));
 const require = createRequire(import.meta.url);
 const declarations=spawnSync(process.execPath,[require.resolve('typescript/bin/tsc'),'-p',configFile],{cwd:root,encoding:'utf8'});rmSync(configFile);

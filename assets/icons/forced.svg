@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 19" role="img" aria-label="forced move">
+  <path opacity=".3" d="M9 .5a9 9 0 1 0 9 9 9 9 0 0 0-9-9Z"/>
+  <path fill="#7eb455" d="M9 0a9 9 0 1 0 9 9 9 9 0 0 0-9-9Z"/>
+  <g transform="translate(0 -.2)">
+    <path opacity=".2" transform="translate(0 .5)" d="M14.6 8.73 9.15 3.9a.58.58 0 0 0-.95.44v2.28H3.75a.75.75 0 0 0-.75.75v3.26c0 .41.34.75.75.75H8.2v2.28a.58.58 0 0 0 .95.44l5.45-4.83a.72.72 0 0 0 0-1.08Z"/>
+    <path fill="#fff" d="M14.6 8.73 9.15 3.9a.58.58 0 0 0-.95.44v2.28H3.75a.75.75 0 0 0-.75.75v3.26c0 .41.34.75.75.75H8.2v2.28a.58.58 0 0 0 .95.44l5.45-4.83a.72.72 0 0 0 0-1.08Z"/>
+  </g>
+</svg>

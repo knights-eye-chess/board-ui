@@ -1,7 +1,7 @@
 {
   "node": "v24.19.0",
   "engine": "Chromium /usr/bin/chromium",
-  "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.3",
+  "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.5",
   "results": [
     {
       "width": 1280,

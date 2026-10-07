@@ -1,4 +1,4 @@
-/** Shared rendering leaf. Chess legality, animations and event policy belong to callers. */
+/** Shared rendering leaf. Chess legality belongs to the host; controlled-board owns interaction and animation. */
 export type BoardOrientation = 'white' | 'black';
 export type Square = `${'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'}${'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'}`;
 export const BOARD_FILES = 'abcdefgh';

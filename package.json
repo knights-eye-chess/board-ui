@@ -1,6 +1,6 @@
 {
   "name": "@knights-eye-chess/board-ui",
-  "version": "0.1.0-dev.3",
+  "version": "0.1.0-dev.5",
   "private": true,
   "type": "module",
   "description": "Controlled engine-free chess board UI with host-owned position and legality",
@@ -13,6 +13,27 @@
     "./renderer": {
       "types": "./dist/controlled-board-renderer.d.ts",
       "import": "./dist/controlled-board-renderer.js"
+    },
+    "./appearance": {
+      "types": "./dist/appearance.d.ts",
+      "import": "./dist/appearance.js"
+    },
+    "./arrows": {
+      "types": "./dist/arrows.d.ts",
+      "import": "./dist/arrows.js"
+    },
+    "./move-strip": {
+      "types": "./dist/move-strip.d.ts",
+      "import": "./dist/move-strip.js"
+    },
+    "./viewer": {
+      "types": "./dist/viewer.d.ts",
+      "import": "./dist/viewer.js"
+    },
+    "./icons/*": "./assets/icons/*",
+    "./move-strip-panel": {
+      "types": "./dist/move-strip-panel.d.ts",
+      "import": "./dist/move-strip-panel.js"
     }
   },
   "files": [
@@ -35,7 +56,7 @@
   },
   "scripts": {
     "build": "node build.mjs",
-    "test": "npm run build && node --test tests/controlled-board.test.mjs",
+    "test": "npm run build && node --test tests/*.test.mjs",
     "test:browser": "node tests/browser-check.mjs",
     "docs:screenshot": "node examples/capture-screenshot.mjs",
     "check": "npm run build && npm test",

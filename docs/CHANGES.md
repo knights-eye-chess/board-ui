@@ -20,3 +20,19 @@ The accepted archive was packed before final repository-only qualification notes
 and this change record. Its runtime/assets/README/screenshot are qualified; source
 receipts distinguish later documentation edits. Do not repack the same version
 and replace the accepted bytes.
+
+# Headless board and optional strip — 7 October 2026
+
+Private dev.5 adds package-owned appearance catalogues, default pieces and icons,
+three descriptive arrow styles with original geometry, transitions/animation,
+production drag/promotion behavior, runtime themes/coordinates, incremental named
+overlays and a controlled move-strip/composite API. The host supplies chess state,
+legality and view models and receives intentions; it no longer implements these
+visuals/gestures. Explicit accepted intent IDs prevent duplicate drag travel.
+
+Eleven source and eleven independently installed archive tests pass, with eighteen
+original arrow-geometry goldens and desktop/mobile Chromium checks. The app's
+native-host browser scenario separately verifies canonical branch navigation and
+live center crossings. dev.4 was an unadopted packaging iteration; dev.5 is the
+accepted immutable candidate. Qualification records/change notes follow packing;
+no runtime was repacked or overwritten. Existing archives remain unchanged.

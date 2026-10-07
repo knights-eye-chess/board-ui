@@ -1,0 +1,141 @@
+{
+  "schema": "knights-eye-icon-assets/1",
+  "sourceRepository": "knights-eye-chess/knightseye-net",
+  "sourceCommit": "99309e40a8bcb86836d859196d2d94df1bbdba27",
+  "sourceDirectory": "public/quality-icons",
+  "byteChanges": false,
+  "files": [
+    {
+      "file": "alternative.svg",
+      "sha256": "1276313858a93684a7c95fb3fbd346b84e046b6b8def479c205a73307e6d14aa"
+    },
+    {
+      "file": "best.svg",
+      "sha256": "09146ad7ed75bde6998a43e221ffad50a10d1d8896e0ec6a3927197c8d0c7ef1"
+    },
+    {
+      "file": "blunder.svg",
+      "sha256": "295dd6135ae0792635dd94c878fa18d2f025c74f05d992b4808e3c5bb1a788f3"
+    },
+    {
+      "file": "book.svg",
+      "sha256": "e57786fadc5dc2d89369bbb585a835761ccbfb21ee49e0aacc1a19843d2854b0"
+    },
+    {
+      "file": "brilliant.svg",
+      "sha256": "fd077e81d8d7e406f0a24c3efb1967a0f1cc55c7dae43e3de7a7d0fd11fdc56e"
+    },
+    {
+      "file": "checkmate_black.svg",
+      "sha256": "e531e06b7ecee36d6d84c5f4781943daeb170714d36bdfa3e9f21acceab56d49"
+    },
+    {
+      "file": "checkmate_white.svg",
+      "sha256": "32d5848a0e574250f3501efaf176865b659058f538e5d5479db695874d77e68c"
+    },
+    {
+      "file": "correct.svg",
+      "sha256": "6cba35b5b91aca373089d2a796b16d8c490255d5e36c457720ae3b00f03d8c00"
+    },
+    {
+      "file": "critical.svg",
+      "sha256": "5d1c7789ace7717455b37ebfa4201a96fcd752eeca5ea4b268e65d44209f3b1f"
+    },
+    {
+      "file": "draw_black.svg",
+      "sha256": "404405ab229f87b9ad3da776e569bfbf3a45a2a0d862d7b1cbbcbd5cab916d1b"
+    },
+    {
+      "file": "draw_white.svg",
+      "sha256": "6bf0cab0452ff3f963415f660c186fdae87c65d4ab5b90ee0dcdb7a9cb84f141"
+    },
+    {
+      "file": "dubious.svg",
+      "sha256": "ddaf979cd84bbf8febc2357d1d48423489886b388a188eb1f671c2e3bf40a83e"
+    },
+    {
+      "file": "fast_win.svg",
+      "sha256": "edd3954f8714beb0e4896fae74d17d0fae144067869c1a02a6708837d298efa3"
+    },
+    {
+      "file": "forced.svg",
+      "sha256": "519ef58c57845bce2a6471a8d4c1847bbed8ba07fd85ca5dfd6d0bdbe0a34e6d"
+    },
+    {
+      "file": "free_piece.svg",
+      "sha256": "8e87826309174d8b7a3a0a08562309f718e18f6adfd7d521f4bb39f88ef64849"
+    },
+    {
+      "file": "good.svg",
+      "sha256": "5403f82f50703491b79956101b061488e0c491817ccfd69e7e3c80a0de21db14"
+    },
+    {
+      "file": "great_find.svg",
+      "sha256": "f0e2d37c2c6749b5defa021c9da7194cae129069f5775fd8d016df3c8f5e5586"
+    },
+    {
+      "file": "incorrect.svg",
+      "sha256": "43829b81d204236247d576fe1c76e17506d6329a7eaee8fc1f068112c8c629f3"
+    },
+    {
+      "file": "interesting.svg",
+      "sha256": "9d1c9edf8826dfa8e310571a9d732707521efb30c46c33f9a317b27bbe0112ec"
+    },
+    {
+      "file": "mate.svg",
+      "sha256": "4fd1ae0e5e3202ee84eb225896543d4f8ea80ac6b88fcc6bf06221c8ba04380e"
+    },
+    {
+      "file": "missed_win.svg",
+      "sha256": "95f7fadf23ed0fb077edc7bacbe16ec5bd0a2cd420f34c51d1c668045902d4c4"
+    },
+    {
+      "file": "mistake.svg",
+      "sha256": "13feb8e00bb0dd6900835da83d4e36f1de04d3670385b70f6e850f633bd2f596"
+    },
+    {
+      "file": "okay.svg",
+      "sha256": "3135908b1a8f75fed9fcd35aa9724a6460eacf96099540ef9849b24a9f38e251"
+    },
+    {
+      "file": "resign_black.svg",
+      "sha256": "c2b3970e3452a2043dc8b7e73cb1b0570723e7f825835deca1918a9cd8b50274"
+    },
+    {
+      "file": "resign_white.svg",
+      "sha256": "0c2bdda5fc18e1c970c163d3fb8938d002b58d4b2558cb824a4eab966c34fa11"
+    },
+    {
+      "file": "sharp.svg",
+      "sha256": "956358fdc03cde47e6ec35c82e63358270c28cf859759f6209956e9899b05f11"
+    },
+    {
+      "file": "take_back.svg",
+      "sha256": "22aecf6236813a4a7fc0a1c9d8e83f46b6048ea98eba67bd481e5d1839e382dc"
+    },
+    {
+      "file": "threat.svg",
+      "sha256": "f671a57761ea756fb1e9e24f4787c79f96b8e119958110634fff770126ead5b0"
+    },
+    {
+      "file": "unnamed_clock_black.svg",
+      "sha256": "eb11d53c1e25f5abeedd71d9b540f5e29a6f0ecf74a5d3c229747929101a52de"
+    },
+    {
+      "file": "unnamed_clock_white.svg",
+      "sha256": "526ea0ad61544447a7eda0908892e81899ab158fa869996de41fff383e8caaf7"
+    },
+    {
+      "file": "unnamed_redo.svg",
+      "sha256": "c3fb0c23cba2ea230d6f58e5892e658e93a6e9262099f5c59ae5adf860f4097b"
+    },
+    {
+      "file": "unnamed_updown_arrow.svg",
+      "sha256": "3968795e348c087419501b0bd557131d9b3d3bf592347c8b5196e0c02d1a7964"
+    },
+    {
+      "file": "winner.svg",
+      "sha256": "e3b614c8c14604e6204fc6bc07287e804c78982375f8baa57bbddaac5ffc9704"
+    }
+  ]
+}
