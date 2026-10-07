@@ -25,6 +25,11 @@ Use `mountControlledBoard` for the interactive board. The `/renderer` entry poin
 exposes square rendering and coordinate helpers for hosts with their own
 interaction controller.
 
+The [target visual contract](docs/VISUAL-CONTRACT.md) records the owner's
+requirements for board-owned arrows, pieces, classification icons, extensible
+themes and runtime coordinate controls. It distinguishes planned APIs from the
+current preview and proposes a staged migration shared with the application.
+
 ## Quick start
 
 Install a checked private archive. These previews are not in the public registry:
