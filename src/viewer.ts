@@ -70,7 +70,7 @@ export function mountBoardViewer(host: HTMLElement, options: BoardViewerOptions)
     listen(button,'click',event=>{if(repeated&&(event as MouseEvent).detail!==0){event.preventDefault();repeated=false;return;}action();});
     listen(button,'pointerdown',event=>{const pointer=event as PointerEvent;if(button.disabled||pointer.button!==0)return;clear();repeated=false;delay=window.setTimeout(()=>{repeated=true;action();repeat=window.setInterval(()=>{if(button.disabled)clear();else action();},55);},340);});
     for(const name of ['pointerup','pointercancel','pointerleave','lostpointercapture'])listen(button,name,clear);
-    listen(window,'pointerup',clear);listen(window,'pointercancel',clear);cleanups.push(clear);
+    listen(window,'pointerup',clear);listen(window,'pointercancel',clear);listen(button,'contextmenu',event=>{if(repeated)event.preventDefault();});cleanups.push(clear);
   }
   bindTransport(options.slots?.previous,'previous');bindTransport(options.slots?.next,'next');
   if(options.onNavigationCommand) listen(host,'keydown',event=>{

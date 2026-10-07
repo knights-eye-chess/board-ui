@@ -183,3 +183,13 @@ Move intents carry an instance-scoped intent ID. The host echoes that ID in the
 state update accepting the move; drag travel suppression is associated with
 that explicit acceptance. An unrelated update or expired pending intent cannot
 suppress a later animation. A rejection leaves the authoritative position intact.
+
+## Mobile parity correction
+
+The controlled extraction must preserve the original widget's nested enclosing
+segments, text-left anchoring, collision packing and native touch scrolling.
+A flattened row overlay with custom pointer panning is not an equivalent UI.
+Original desktop/mobile typography, padding, borders and quality-text blending
+remain defaults. Empty board squares permit native page swipes. Live navigation
+keeps clipping extent stable until touch/inertia settles. Compare actual original
+versus new geometry and browser-native touch input, not viewport width alone.

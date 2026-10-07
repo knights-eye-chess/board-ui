@@ -108,3 +108,17 @@ subtracts half the offsetWidth-clientWidth difference, rather than the full term
 Source14/14, installed14/14 and Chromium desktop/mobile pass. Default app viewport
 has no border; this additional term fix preserves its dev.16 geometry. Notes were
 recorded after immutable packing.
+
+## Dev.18 — faithful mobile presentation restoration
+
+Restores original nested segments/grouping brackets, collision-packed child/root
+layout, text-left anchoring, original move typography/color blending/start pawn.
+Main/branch rows share one native scroller (pan-x/pan-y); custom branch pointer
+panning is removed. Full rendered clipping extent stays fixed while scrolling,
+including controlled cursor feedback and inertia, then restores selected-line
+range. Deferred metric relayout keeps manual positioning. TouchEvents retain
+finger ownership after native PointerEvent cancellation. Empty-square page swipes,
+per-piece drag handling, cancellation recovery and repeated-hold context menu
+handling match the original. Original-vs-native app fixture compares nesting,
+geometry, visible styling, icons and native Chromium touch trajectories; physical
+iOS remains unqualified.

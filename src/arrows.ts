@@ -73,6 +73,8 @@ export interface ArrowRenderOptions {
   opacity?: number;
   outlineOpacity?: number;
   layer?: number;
+  /** Optional soft shadow, independent of arrow meaning or shape. */
+  shadow?: boolean;
   label?: string;
   /** Opaque host tag, preserved for selectors without influencing shape choice. */
   tag?: string;
@@ -103,6 +105,7 @@ export function renderArrowSvg(document: Document, options: ArrowRenderOptions):
   if (options.tag !== undefined) svg.setAttribute('data-tag',options.tag);
   svg.style.position='absolute'; svg.style.inset='0'; svg.style.width='100%'; svg.style.height='100%';
   svg.style.overflow='visible'; svg.style.pointerEvents='none';
+  if(options.shadow===true)svg.style.filter='drop-shadow(0 1px 2px #0008)';
   svg.style.zIndex=String(Math.max(1,Math.min(40,Number(options.layer)||10)));
   if (options.label) { svg.setAttribute('role','img'); svg.setAttribute('aria-label',options.label); }
   else svg.setAttribute('aria-hidden','true');
