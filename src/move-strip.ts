@@ -120,9 +120,9 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
   function viewportWidth(){return viewport.clientWidth;}
   function nativeEnd(){const line=selectedButtons(),last=line[line.length-1];if(!last)return viewportWidth();const outer=viewport.getBoundingClientRect(),end=last.getBoundingClientRect(),style=win.getComputedStyle(viewport),extra=(parseFloat(style.paddingLeft)||0)+(parseFloat(style.paddingRight)||0)+viewport.offsetWidth-viewport.clientWidth;return Math.max(viewportWidth(),Math.ceil(end.left+end.width/2-outer.left+viewport.scrollLeft+viewportWidth()/2-extra));}
   /** Clamp against the existing range before shrinking it, avoiding a late rewind. */
-  function lockRange(){const width=nativeEnd(),max=Math.max(0,width-viewportWidth());if(viewport.scrollLeft>max)viewport.scrollLeft=max;content.style.width=`${width}px`;}
+  function lockRange(){const width=nativeEnd(),max=Math.max(0,width-viewportWidth());if(viewport.scrollLeft>max){viewport.scrollLeft=max;positionBranches();}content.style.width=`${width}px`;}
   function showCurrent(){for(const [identity,button] of buttons){const current=identity===key(view.current);button.classList.toggle('current',current);if(current)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');}}
-  function centerCurrent(){const button=buttons.get(key(view.current));if(!button)return;lockRange();const outer=viewport.getBoundingClientRect();programmaticUntil=Date.now()+240;viewport.scrollLeft=Math.max(0,Math.min(viewport.scrollWidth-viewport.clientWidth,viewport.scrollLeft+centerOf(button)-(outer.left+outer.width/2)));positionBranches();}
+  function centerCurrent(){const button=buttons.get(key(view.current));if(!button)return;userPositioned=false;lockRange();const outer=viewport.getBoundingClientRect();programmaticUntil=Date.now()+240;viewport.scrollLeft=Math.max(0,Math.min(viewport.scrollWidth-viewport.clientWidth,viewport.scrollLeft+centerOf(button)-(outer.left+outer.width/2)));positionBranches();}
   function request(cursor:MoveStripCursor,source:'click'|'scroll'|'keyboard'){
     const identity=key(cursor);if(source==='scroll'&&(identity===key(view.current)||identity===lastRequested))return;
     lastRequested=identity;scrollCallback=source==='scroll';try{options.onNavigate(copyCursor(cursor),{source});}finally{scrollCallback=false;}

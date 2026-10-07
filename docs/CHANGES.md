@@ -66,3 +66,13 @@ user scrolling takes ownership. Active or manually positioned gestures retain
 their scroll position. Added resize/font-center and held-font regression coverage.
 Source and ordinary-installed dev.12 archive tests pass14/14; Chromium desktop
 and375px matrix passes. Qualification notes were recorded after immutable packing.
+
+## Private dev.13: controlled positioning ownership
+
+Every controlled recenter clears stale user-positioned state. Font regression now
+changes actual glyph/button widths and covers manual scroll then controlled
+navigation then changed metrics. While testing a late-main to short-branch jump,
+range clamping exposed stale translated branch positions; synchronously realign
+those overlays on clamp before subsequent measurement to avoid double shrinking.
+Source and ordinary-installed archive tests14/14 and desktop/mobile Chromium pass.
+Qualification notes follow immutable packing.
