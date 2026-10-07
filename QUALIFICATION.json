@@ -1,11 +1,11 @@
 {
-  "version": "0.1.0-dev.19",
-  "sourceBaseline": "7a0226d",
+  "version": "0.1.0-dev.20",
+  "sourceBaseline": "f167f6d",
   "workingTreeChangesIncluded": true,
   "node": "v24.19.0",
   "archive": {
-    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.19.tgz",
-    "sha256": "b9d9bfa8165736da5447b3b55237a3548ba5e2415303277c2dc39ebdfc022230"
+    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.20.tgz",
+    "sha256": "8e6ad3b3cd36a6d1c332af5c013c5a33b6a4aeee611f091a82e9b394413d1159"
   },
   "tests": {
     "source": 15,
@@ -17,7 +17,7 @@
   "browser": {
     "node": "v24.19.0",
     "engine": "Chromium /usr/bin/chromium",
-    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.19",
+    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.20",
     "results": [
       {
         "nativeTouch": true,
@@ -41,5 +41,5 @@
     "Original-vs-native app parity receipt is qualified by the compatible app release"
   ],
   "notes": "Native range includes viewport padding and half the outer/client difference, matching the measured outer midpoint. Regression verifies actual native range and stable valid offsets on unchanged-cursor refresh with explicit border/vertical scrollbar. Source14/14, installed14/14 and desktop/mobile Chromium pass; native integration passes same-cursor endpoint checks. Notes follow immutable packing.",
-  "correction": "Restore measured original root gap after dev.18 candidate comparison caught a 2px branch offset. Mobile border restoration retained."
+  "correction": "Original nesting/geometry restored; native gesture with no movement resets manual positioning ownership, as confirmed by original endPointerScroll review."
 }

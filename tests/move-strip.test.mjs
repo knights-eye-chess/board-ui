@@ -54,6 +54,7 @@ test('controlled strip resolves live center crossings, bounds selected range, an
     await page.evaluate(()=>window.dispatchEvent(new PointerEvent('pointerup',{pointerId:11})));await page.waitForTimeout(220);assert.equal((await page.evaluate(()=>window.strip.getInteractionState())).userGesture,false);
     await vp.dispatchEvent('pointerdown',{pointerId:22,button:0,pointerType:'touch'});await vp.evaluate(node=>{node.scrollLeft=150;});await page.waitForTimeout(50);await page.evaluate(()=>window.dispatchEvent(new PointerEvent('pointerup',{pointerId:22})));await page.waitForTimeout(220);
     assert.equal(await page.evaluate(()=>window.strip.getInteractionState().userPositioned),true,'manual scroll owns positioning');
+    await vp.dispatchEvent('pointerdown',{pointerId:23,button:0,pointerType:'touch'});await page.evaluate(()=>window.dispatchEvent(new PointerEvent('pointerup',{pointerId:23})));assert.equal(await page.evaluate(()=>window.strip.getInteractionState().userPositioned),false,'a touch with no movement returns positioning ownership as in the original');await page.waitForTimeout(220);
     await page.evaluate(()=>{window.view={...window.view,current:{kind:'main',ply:9}};window.strip.update(window.view);});
     assert.equal(await page.evaluate(()=>window.strip.getInteractionState().userPositioned),false,'controlled navigation returns positioning ownership');
     const navigationWidth=await root.locator('button[data-cursor="m:9"]').evaluate(button=>button.getBoundingClientRect().width);
