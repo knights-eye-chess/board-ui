@@ -5,7 +5,7 @@ icons, animation, interaction, and an optional moves strip. The host supplies ch
 state and handles events. No engine, classifier, game-tree implementation, account,
 or persistence service is required.
 
-Private preview `0.1.0-dev.10`; no public publication or license grant.
+Private preview; no public publication or license grant.
 See [visual contract](docs/VISUAL-CONTRACT.md) and [asset provenance](assets/README.md).
 
 ## Ownership

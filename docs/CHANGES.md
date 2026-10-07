@@ -86,3 +86,15 @@ and gesture rules. Observer targets reset with rebuilt buttons and disconnect on
 disposal. Regression changes real widths without dispatching loadingdone; installed
 native-host desktop/mobile scenarios do the same. Source14/14, installed14/14 and
 component Chromium matrix pass. Qualification notes follow immutable packing.
+
+## Private dev.16: keep endpoint center on incremental refresh
+
+The real saved-game7.6/8px drift persisted after dev.14. Corrected diagnosis:
+range width measures content, but native scroll range also includes viewport
+padding. The previous clamp dropped those8px on an unchanged-cursor update even
+when the selection was centered. Include padding in the clamp; regression calls
+update with the same last-move cursor and verifies it remains centered. Source,
+ordinary-installed archive and real native-host desktop/mobile checks pass.
+The independent event-free metric fix from dev.14 remains valid. Preview README
+now uses the manifest as version authority. Dev.15 was an unadopted staging pack.
+Qualification notes follow immutable packing.
