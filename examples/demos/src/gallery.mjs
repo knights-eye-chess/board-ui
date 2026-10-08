@@ -12,6 +12,9 @@ const state=()=>({position,positionKey:`gallery-${preview}`,orientation:controls
 const viewer=mountBoardViewer(host,{board:{appearance:catalogue,state:state(),onSelect(square){selectedSquare=square;viewer.updateBoard(state())},onMove(){}},moveStrip:{view:strip(),figurines:false,onNavigate(cursor){current=cursor;viewer.updateStrip(strip())}},slots:{board:host.querySelector('[data-board]'),moveStrip:host.querySelector('[data-strip]')}});
 function update(){
   const f=controls.elements,appearance={pieceSet:f.pieces.value,iconSet:f.icons.value,squareTheme:f.theme.value,coordinates:{visible:f.coordinates.checked,size:Number(f.size.value)},animation:{durationMs:Number(f.animation.value)}};
+  // A custom-only badge (bookmark) is not valid in the bundled icon set.
+  // Remove set-specific overlays before switching, then supply the new set's IDs.
+  viewer.updateBoardOverlays('gallery',null);
   viewer.updateAppearance(appearance);viewer.updateBoard(state());
   viewer.updateBoardOverlays('gallery',{arrows:f.arrows.checked?[{from:'g1',to:'f3',label:'Arrow geometry sample',style:f.arrow.value,color:f.color.value,opacity:.85},{from:'d2',to:'d4',label:'Vertical arrow sample',style:f.arrow.value,color:f.color.value,opacity:.65}]:[],badges:[{square:'f3',icon:'best',label:'Best icon sample'},{square:'e4',icon:f.icons.value==='diamond-marks'?'bookmark':'book',label:f.icons.value==='diamond-marks'?'Host-defined saved idea':'Book icon sample'}]});
   document.querySelector('#coordinate-size').textContent=`${f.size.value}px`;document.querySelector('#animation-duration').textContent=`${f.animation.value}ms`;

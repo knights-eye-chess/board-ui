@@ -1,14 +1,16 @@
 import assert from 'node:assert/strict';
 import {mkdirSync, writeFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
-import {chromium} from 'playwright';
+import {chromium,webkit} from 'playwright';
 import {demoServer} from '../serve.mjs';
 
 // Exercise the same subpath as GitHub Pages, not only a root-mounted server.
 const server=demoServer({basePath:'/board-ui/'});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const base=`http://127.0.0.1:${server.address().port}/board-ui`;
-const browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH}:{}),args:['--no-sandbox']});
-const out=fileURLToPath(new URL('../dist/qualification/',import.meta.url));mkdirSync(out,{recursive:true});
+const engine=process.env.DEMO_BROWSER||'chromium';
+assert.ok(['chromium','webkit'].includes(engine),'Supported browser engine');
+const browser=await ({chromium,webkit}[engine]).launch({headless:true,...(engine==='chromium'&&process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH}:{}),args:engine==='chromium'?['--no-sandbox']:[]});
+const out=fileURLToPath(new URL(`../dist/qualification/${engine}/`,import.meta.url));mkdirSync(out,{recursive:true});
 const results=[];
 try {
   for(const width of [1440,390]) {
@@ -102,13 +104,39 @@ try {
     assert.equal(await board.locator('.piece.moved').count(),0);
     await form.locator('[name="arrows"]').uncheck();assert.equal(await board.locator('svg.arrows').count(),0);
     await form.locator('[name="arrows"]').check();await imagesLoaded();
+    // Custom-only IDs must leave the board before changing back to bundled icons.
+    // Check complete geometry during travel and after settling, not just the knight.
+    const intactGrid=async()=>{
+      const geometry=await board.locator('.board').evaluate(b=>{
+        const rect=b.getBoundingClientRect(),squares=[...b.querySelectorAll('.sq')];
+        return {count:squares.length,rows:b.querySelectorAll('[role="row"]').length,
+          correct:squares.every((sq,i)=>{const r=sq.getBoundingClientRect();return Math.abs(r.width-rect.width/8)<.1&&Math.abs(r.height-rect.height/8)<.1&&Math.abs(r.x-rect.x-i%8*rect.width/8)<.1&&Math.abs(r.y-rect.y-Math.floor(i/8)*rect.height/8)<.1})};
+      });
+      assert.deepEqual(geometry,{count:64,rows:8,correct:true},`${engine}: full eight-by-eight board`);
+      assert.equal(await board.locator('svg.arrows').count(),2);
+    };
+    await form.locator('[name="animation"]').fill('200');await form.locator('[name="animation"]').dispatchEvent('input');
+    for(const orientation of ['black','white'])for(const pieces of ['glossy','outlined-silhouette']) {
+      await form.locator('[name="orientation"]').selectOption(orientation);
+      await form.locator('[name="pieces"]').selectOption(pieces);
+      for(const icons of ['diamond-marks','quality','diamond-marks','quality']) {
+        await form.locator('[name="icons"]').selectOption(icons);await intactGrid();
+        const custom=icons==='diamond-marks';
+        assert.equal(await board.locator(`.badge[aria-label="${custom?'Host-defined saved idea':'Book icon sample'}"]`).count(),1);
+        assert.equal(await board.locator(`.badge[aria-label="${custom?'Book icon sample':'Host-defined saved idea'}"]`).count(),0);
+        await page.locator('#replay').click();await intactGrid();
+        assert.equal(await board.locator('.piece.moved').count(),1);
+        await page.waitForTimeout(250);await intactGrid();
+      }
+    }
+
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     await page.screenshot({path:out+`appearance-${width}.png`,fullPage:true});
     assert.deepEqual(errors,[]);assert.deepEqual(outside,[]);assert.deepEqual(failed,[]);
     for(const file of ['LICENSE','LICENSE-GPL','LICENSE-ARTWORK','THIRD-PARTY.txt','source/board-ui-demo-source.tar.gz']) {
       const response=await page.request.get(base+'/'+file);assert.equal(response.status(),200,file);
     }
-    results.push({width,pagesSubpath:true,sourceDownload:true,licenseFiles:true,sharedFullWidthStrip:true,darkModePersistence:true,synchronized:true,nestedVariation:true,drag:true,underpromotion:true,castling:true,keyboard:true,customAssets:true,customArrow:true,coordinates:true,animation:true,overflow:false,externalRequests:outside,pageErrors:errors});await page.close();
+    results.push({engine,width,iconSetRoundTrips:true,replayGridGeometry:true,pagesSubpath:true,sourceDownload:true,licenseFiles:true,sharedFullWidthStrip:true,darkModePersistence:true,synchronized:true,nestedVariation:true,drag:true,underpromotion:true,castling:true,keyboard:true,customAssets:true,customArrow:true,coordinates:true,animation:true,overflow:false,externalRequests:outside,pageErrors:errors});await page.close();
   }
 } finally {await browser.close();await new Promise(resolve=>server.close(resolve))}
 writeFileSync(out+'browser-results.json',JSON.stringify(results,null,2)+'\n');console.log(JSON.stringify(results));

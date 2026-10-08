@@ -21,12 +21,14 @@ and artwork are local; no CDN, fonts or API requests are needed.
 
 ```sh
 npm run demo:test
-npx playwright install chromium
+npx playwright install --with-deps chromium webkit
 npm run demo:check
+DEMO_BROWSER=webkit node examples/demos/tests/browser.mjs
 ```
 
 `demo:check` builds the site, tests the host model and exercises desktop/phone
-layouts in Chromium. Select an installed Chromium with
+layouts in Chromium. The additional command exercises the same checks in WebKit;
+the Pages workflow runs both. This does not qualify real iOS hardware. Select an installed Chromium with
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`. Screenshots, browser results and bundle
 input/size reports are generated in `dist/` and excluded from source archives.
 
@@ -65,6 +67,8 @@ arrow shapes/colors, perspective, coordinate visibility/size and animation durat
 **Replay knight move** demonstrates animation. Icon labels are artwork samples;
 no classifications are calculated. The custom **Saved idea** badge illustrates
 host-defined vocabulary. Hiding printed coordinates retains accessible square names.
+The host clears its set-specific overlays before changing icon sets, then supplies
+IDs available in the new set (`bookmark` in the custom set, `book` in the default).
 
 Both pages share a **dark/light switch**, start from the device preference and
 remember explicit choices. Shell dark mode and board square themes are independent.
