@@ -103,7 +103,9 @@ The ordered selected line includes the main prefix and all selected branch ances
 `onNavigate(cursor,{source})` requests host navigation. The strip never changes the
 chess tree. Native scroll center crossings emit requests while the pointer remains
 down. Programmatic centering does not navigate. Longer sibling variations remain
-painted without extending the selected line's native scroll range.
+painted without extending the selected line's native scroll range. The selected
+line's range is frozen at gesture start through finger contact and inertia, so
+a short branch cannot scroll past its last move while the user is touching it.
 `updateMove(cursor,patch)` updates late classification in place; `update`, `center`,
 `setGestureBlocked`, `getInteractionState`, `getBranchRows`, `getCurrentBounds`,
 `subscribe`, `relayout` and `dispose` expose behavior without DOM coupling. Auto-follow

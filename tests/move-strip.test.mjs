@@ -16,7 +16,7 @@ test('controlled strip resolves live center crossings, bounds selected range, an
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
   try{for(const width of [1280,375]){
-    const page=await browser.newPage({viewport:{width,height:700}}),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.goto(`http://127.0.0.1:${server.address().port}`);
+    const page=await browser.newPage({viewport:{width,height:700},hasTouch:true}),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.goto(`http://127.0.0.1:${server.address().port}`);
     await page.evaluate(async initial=>{const {mountMoveStrip}=await import('/move-strip.js');window.events=[];window.view=initial;window.strip=mountMoveStrip(document.querySelector('#strip'),{view:initial,onNavigate(cursor,details){window.events.push({cursor,source:details.source});window.view={...window.view,current:cursor};window.strip.update(window.view);},onCommand(command){window.events.push({command});},onGestureStart(){window.events.push({gesture:'start'});},onGestureEnd(){window.events.push({gesture:'end'});},onUserScroll(){window.events.push({gesture:'scroll'});},onSettled(){window.events.push({gesture:'settled'});},appearance:{resolveIcon(id){return id==='quality'?{src:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"/%3E',width:12,height:12}:null;}}});},view);
     const root=page.locator('#strip > div');const vp=root.locator('.viewport'),buttons=root.locator('button');assert.equal(await buttons.count(),24);
     assert.equal(await root.locator('button[data-cursor="m:1"] .san').textContent(),'♞f1','default SAN display retains chess figurines');
@@ -66,6 +66,15 @@ test('controlled strip resolves live center crossings, bounds selected range, an
     await page.waitForTimeout(80);
     await page.evaluate(()=>{window.events=[];window.view={...window.view,selectedLine:[...window.view.main.slice(0,4).map(x=>x.cursor),...window.view.branches[0].moves.map(x=>x.cursor)],current:{kind:'branch',branchId:'short',index:2}};window.strip.update(window.view);});
     const branchMetrics=await vp.evaluate(node=>({left:node.scrollLeft,max:node.scrollWidth-node.clientWidth}));assert.ok(Math.abs(branchMetrics.left-branchMetrics.max)<3,`branch endpoint centerable: ${JSON.stringify({branchMetrics,firstMetrics})}`);assert.ok(branchMetrics.max<firstMetrics.max,'longer main/sibling cannot extend native range');
+    // KE-NAV-004: a short branch stays natively bounded during touch, not only after settle.
+    await page.waitForTimeout(260);
+    const touchBox=await vp.boundingBox(),cdp=await page.context().newCDPSession(page);
+    const point={x:touchBox.x+touchBox.width*.8,y:touchBox.y+touchBox.height-8,id:7,radiusX:2,radiusY:2,force:1};
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[point]});
+    assert.equal(await vp.evaluate(node=>node.scrollWidth-node.clientWidth),branchMetrics.max,'touch start cannot reopen the full tree beyond a short branch endpoint');
+    for(let step=1;step<=8;step++){await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{...point,x:point.x-step*22}]});await page.waitForTimeout(35);assert.ok(await vp.evaluate(node=>node.scrollLeft)<=branchMetrics.max,'native touch cannot overscroll a short branch');}
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach();await page.waitForTimeout(300);
+    assert.ok(await centerError()<3,'branch endpoint remains centered after native overscroll attempt');
     assert.ok(Number.isFinite((await page.evaluate(()=>window.strip.getBranchRows())).short));
     const painted=await root.locator('button[data-cursor="b:long:0"]').evaluate(button=>{const r=button.getBoundingClientRect(),shadow=button.getRootNode(),viewport=shadow.querySelector('.viewport').getBoundingClientRect(),x=Math.max(viewport.left+2,Math.min(viewport.right-2,r.left+r.width/2)),y=r.top+r.height/2;return r.left<viewport.right&&r.right>viewport.left&&shadow.elementFromPoint(x,y)?.closest('button')===button;});assert.equal(painted,true,'long sibling remains painted inside bounded viewport');
     const aligned=await root.evaluate(node=>{const shadow=node.shadowRoot,anchor=shadow.querySelector('button[data-cursor="b:short:1"]').getBoundingClientRect(),child=shadow.querySelector('button[data-cursor="b:child:0"]').getBoundingClientRect();const a=shadow.querySelector('button[data-cursor=\"b:short:1\"]'),c=shadow.querySelector('button[data-cursor=\"b:child:0\"]');return Math.abs(anchor.left+parseFloat(getComputedStyle(a).paddingLeft)-child.left-parseFloat(getComputedStyle(c).paddingLeft));});assert.ok(aligned<3,'nested child text starts under its canonical anchor text');

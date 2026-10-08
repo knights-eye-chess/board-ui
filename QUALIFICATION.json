@@ -1,10 +1,10 @@
 {
-  "version": "0.1.0-dev.21",
+  "version": "0.1.0-dev.22",
   "sourceBaseline": "f167f6d",
   "workingTreeChangesIncluded": true,
   "node": "v24.19.0",
   "archive": {
-    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.21.tgz",
+    "file": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.22.tgz",
     "sha256": "8e6ad3b3cd36a6d1c332af5c013c5a33b6a4aeee611f091a82e9b394413d1159"
   },
   "tests": {
@@ -17,7 +17,7 @@
   "browser": {
     "node": "v24.19.0",
     "engine": "Chromium /usr/bin/chromium",
-    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.21",
+    "installedPackage": "@knights-eye-chess/board-ui@0.1.0-dev.22",
     "results": [
       {
         "nativeTouch": true,
@@ -41,5 +41,5 @@
     "Original-vs-native app parity receipt is qualified by the compatible app release"
   ],
   "notes": "Native range includes viewport padding and half the outer/client difference, matching the measured outer midpoint. Regression verifies actual native range and stable valid offsets on unchanged-cursor refresh with explicit border/vertical scrollbar. Source14/14, installed14/14 and desktop/mobile Chromium pass; native integration passes same-cursor endpoint checks. Notes follow immutable packing.",
-  "correction": "Restores original relative positioning on segments containing nested children and activation on all non-programmatic native scrolls. Explicit range clipping prevents invisible siblings from inflating selected-line native range; full tree extent remains stable through gestures/inertia."
+  "correction": "Freeze selected-line native extent during contact/inertia instead of reopening full tree. Real Chromium touch regression reproduces923px vs385px max range before fix, then verifies native endpoint remains bounded while held and after release."
 }

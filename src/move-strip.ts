@@ -114,7 +114,7 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
   function notifyLayout(){for(const listener of subscribers)listener();}
   function listen(target:EventTarget,name:string,handler:EventListener,opts?:AddEventListenerOptions){target.addEventListener(name,handler,opts);listeners.push(()=>target.removeEventListener(name,handler,opts));}
   let pointerId:number|null=null,pointerStart=0,pointerMoved=false,suppressClick=false,userGesture=false,userPositioned=false,scrollFrame=0,settleTimer=0,programmaticUntil=0,scrollCallback=false,lastRequested='',renderPending=false;
-  const branchLanes:HTMLElement[]=[];let treeExtent=0;
+  const branchLanes:HTMLElement[]=[];let gestureWidth=0;
   const metricWidths=new WeakMap<Element,number>();
   const metricObserver=typeof win.ResizeObserver==='function'?new win.ResizeObserver(entries=>{let changed=false;for(const entry of entries){const width=entry.target.getBoundingClientRect().width,previous=metricWidths.get(entry.target);metricWidths.set(entry.target,width);if(previous!==undefined&&Math.abs(width-previous)>.25)changed=true;}if(changed)render(userPositioned);}):null;
   function observeMetrics(){metricObserver?.disconnect();for(const button of buttons.values()){metricWidths.set(button,button.getBoundingClientRect().width);metricObserver?.observe(button);}}
@@ -125,7 +125,7 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
   function nativeEnd(){const line=selectedButtons(),last=line[line.length-1];if(!last)return viewportWidth();const outer=viewport.getBoundingClientRect(),end=last.getBoundingClientRect(),style=win.getComputedStyle(viewport),extra=(parseFloat(style.paddingLeft)||0)+(parseFloat(style.paddingRight)||0)+(viewport.offsetWidth-viewport.clientWidth)/2;return Math.max(viewportWidth(),Math.ceil(end.left+end.width/2-outer.left+viewport.scrollLeft+viewportWidth()/2-extra));}
   /** Clamp against the existing range before shrinking it, avoiding a late rewind. */
   function setClip(width:number){content.style.width=`${width}px`;for(const child of Array.from(content.children)) (child as HTMLElement).style.width=`${width}px`;}
-  function lockRange(){if(userGesture||pointerId!==null){setClip(treeExtent);return;}const width=nativeEnd(),padding=win.getComputedStyle(viewport),horizontalPadding=(parseFloat(padding.paddingLeft)||0)+(parseFloat(padding.paddingRight)||0),max=Math.max(0,width+horizontalPadding-viewportWidth());if(viewport.scrollLeft>max){viewport.scrollLeft=max;}setClip(width);}
+  function lockRange(){if(userGesture||pointerId!==null){setClip(gestureWidth);return;}const width=nativeEnd(),padding=win.getComputedStyle(viewport),horizontalPadding=(parseFloat(padding.paddingLeft)||0)+(parseFloat(padding.paddingRight)||0),max=Math.max(0,width+horizontalPadding-viewportWidth());if(viewport.scrollLeft>max){programmaticUntil=Date.now()+240;viewport.scrollLeft=max;}setClip(width);}
   function showCurrent(){for(const [identity,button] of buttons){const current=identity===key(view.current);button.classList.toggle('current',current);if(current)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');}for(const lane of branchLanes)lane.classList.toggle('active',view.current.kind==='branch'&&view.current.branchId===lane.dataset.branchId);}
   function centerCurrent(){const button=buttons.get(key(view.current));if(!button)return;userPositioned=false;lockRange();const outer=viewport.getBoundingClientRect();programmaticUntil=Date.now()+240;viewport.scrollLeft=Math.max(0,Math.min(viewport.scrollWidth-viewport.clientWidth,viewport.scrollLeft+centerOf(button)-(outer.left+outer.width/2)));}
   function request(cursor:MoveStripCursor,source:'click'|'scroll'|'keyboard'){
@@ -133,7 +133,7 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
     lastRequested=identity;scrollCallback=source==='scroll';try{options.onNavigate(copyCursor(cursor),{source});}finally{scrollCallback=false;}
   }
   function resolveCenter(){const line=selectedButtons();if(!line.length)return;const outer=viewport.getBoundingClientRect(),middle=outer.left+outer.width/2,first=centerOf(line[0]);if(middle<first-1){if(viewport.scrollLeft>0)viewport.scrollLeft=Math.max(0,viewport.scrollLeft-(first-middle));return;}let best=line[0],distance=Infinity;for(const button of line){const next=Math.abs(centerOf(button)-middle);if(next<distance){best=button;distance=next;}}const cursor=view.selectedLine[line.indexOf(best)];if(cursor)request(cursor,'scroll');}
-  function beginGesture(){if(!userGesture){pointerStart=viewport.scrollLeft;pointerMoved=false;options.onGestureStart?.();}userGesture=true;lockRange();programmaticUntil=0;clearTimer();}
+  function beginGesture(){if(!userGesture){gestureWidth=nativeEnd();pointerStart=viewport.scrollLeft;pointerMoved=false;options.onGestureStart?.();}userGesture=true;lockRange();programmaticUntil=0;clearTimer();}
   function settle(){clearTimer();settleTimer=win.setTimeout(()=>{settleTimer=0;if(pointerId!==null){settle();return;}if(userGesture)resolveCenter();userGesture=false;lockRange();lastRequested='';if(renderPending&&!blocked){renderPending=false;render(userPositioned);}options.onSettled?.();},180);}
   function fillButton(button:HTMLButtonElement,item:MoveStripItem){const wasCurrent=button.classList.contains('current');button.replaceChildren();button.className=wasCurrent?'current':'';button.removeAttribute('style');button.dataset.cursor=key(item.cursor);button.dataset.copySan=`${(item.copyPrefix||item.number||'').replace(/…/g,'...')}${item.label}`.trim();button.setAttribute('aria-label',`${item.number?item.number+' ':''}${item.label}${item.annotation?', '+item.annotation:''}${item.iconLabel?', '+item.iconLabel:''}`);if(item.comment)button.title=item.comment;else button.removeAttribute('title');
     if(item.startIconUrl){const start=doc.createElement('span'),image=doc.createElement('img');start.className='start-icon';image.src=item.startIconUrl;image.alt='';start.setAttribute('aria-hidden','true');start.append(image);button.append(start);}else{
@@ -193,9 +193,9 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
     }
     entries.sort((a,b)=>a.left-b.left||b.width-a.width);
     const gapButton=main.querySelector<HTMLElement>('button.current')||main.querySelector<HTMLElement>('button:not(:has(.start-icon))')||main.querySelector<HTMLElement>('button'),rootTop=gapButton?gapButton.getBoundingClientRect().bottom-area.getBoundingClientRect().top+4:0;
-    let maxBottom=0,maxRight=main.scrollWidth;
-    for(const entry of entries){const top=packedTop(entry,occupied,rootTop),right=entry.left+entry.width,bottom=top+entry.height;entry.element.style.left=`${entry.left}px`;entry.element.style.top=`${top}px`;occupied.push({left:entry.left,right,top,bottom});maxBottom=Math.max(maxBottom,bottom);maxRight=Math.max(maxRight,right+half);}
-    area.style.height=entries.length?`${Math.ceil(maxBottom)+3}px`:'0px';treeExtent=Math.ceil(maxRight);showCurrent();lockRange();
+    let maxBottom=0;
+    for(const entry of entries){const top=packedTop(entry,occupied,rootTop),right=entry.left+entry.width,bottom=top+entry.height;entry.element.style.left=`${entry.left}px`;entry.element.style.top=`${top}px`;occupied.push({left:entry.left,right,top,bottom});maxBottom=Math.max(maxBottom,bottom);}
+    area.style.height=entries.length?`${Math.ceil(maxBottom)+3}px`:'0px';showCurrent();lockRange();
     if(preserveScroll)viewport.scrollLeft=Math.min(oldScroll,Math.max(0,viewport.scrollWidth-viewport.clientWidth));else centerCurrent();
     if(focused)buttons.get(focused)?.focus({preventScroll:true});observeMetrics();notifyLayout();
   }

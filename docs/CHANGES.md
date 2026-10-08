@@ -122,3 +122,11 @@ per-piece drag handling, cancellation recovery and repeated-hold context menu
 handling match the original. Original-vs-native app fixture compares nesting,
 geometry, visible styling, icons and native Chromium touch trajectories; physical
 iOS remains unqualified.
+
+## Private Dev22: selected-line native gesture limit
+
+Freeze the selected line’s native range at gesture start and through inertia;
+longer main/sibling branches no longer reopen scrolling beyond its endpoint.
+Center feedback cannot resize the active range. Internal range-clamp events are
+programmatic, so they do not acquire manual ownership. CDP touch regression
+checks the actual scrollWidth/clientWidth limit while held and after release.
