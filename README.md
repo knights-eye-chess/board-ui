@@ -1,163 +1,168 @@
 # Knight's Eye Board UI
 
-First-party code: **MIT**. Packaged artwork: **CC BY 4.0**. See [LICENSING.md](LICENSING.md) for scope and third-party terms.
+Chessboards and move navigation for your app, with pieces, animated moves, arrows,
+themes and an optional moves strip—all in one framework-free component.
 
-Controlled, framework-free chess presentation: board, pieces, arrows, classification
-icons, animation, interaction, and an optional moves strip. The host supplies chess
-state and handles events. No engine, classifier, game-tree implementation, account,
-or persistence service is required.
+**Optimized for mobile:** drag pieces, tap to move, and swipe through moves and
+variations. Board interaction and move-strip scrolling work together, with
+keyboard navigation for desktop users too.
 
-Open-source component; licensed as described above. No public registry publication has been performed.
-See [visual contract](docs/VISUAL-CONTRACT.md) and [asset provenance](assets/README.md).
+Your app supplies the chess positions and decides which moves are legal. Board UI
+handles how they look and how people interact with them. It has **zero runtime
+dependencies** and works with your choice of chess library.
 
-## Playground demos
+**[Try three synchronized boards](https://knights-eye-chess.github.io/board-ui/)**
+· **[Explore themes and artwork](https://knights-eye-chess.github.io/board-ui/gallery.html)**
 
-[One game, three views and Make it yours](examples/demos/README.md) demonstrate
-three synchronized boards with one full-width moves strip, build-time appearance
-extensions and runtime controls. Both pages include a dark/light switch.
-Framework-free; the synchronized demo uses Lichess chessops 0.15.1 and its PGN variation tree.
-The appearance gallery and Board UI library have no runtime dependencies.
+![Three boards with different sizes, themes and perspectives sharing one moves strip](docs/images/three-views.png)
 
-## Ownership
+## What you can build
 
-| Board UI | Host |
-| --- | --- |
-| Squares, coordinates, orientation, pieces, named arrow geometry | Position, legality, history and applying move intentions |
-| Default classification IDs, artwork, colors, labels and groups | Which classification applies and application analysis policy |
-| Animation, drag, click, keyboard and promotion UI | Transition hints when chess semantics require them |
-| Optional controlled strip, centering, live scroll navigation and gesture coordination | Main/variation display descriptions, current cursor and auto-follow policy |
-| Named themes and runtime appearance updates | Build-time extensions and explicit runtime tokens |
+- Interactive boards with dragging, tap/click moves, promotion choices and animation.
+- Game viewers with a moves strip, nested variations and swipe navigation.
+- Analysis boards with arrows, highlighted squares and move-quality icons.
+- Your own look: custom pieces, icons, arrow shapes and square themes.
+- Several boards showing the same game, each with its own size and perspective.
 
-The host needs references only to outer layout slots. It does not query or mutate
-component internals. Both components use open shadow roots; automation can inspect
-them, while application behavior uses APIs and events.
+Use the board, moves strip or combined viewer independently. Bring a chess model
+such as [chessops](https://github.com/niklasf/chessops), or supply positions yourself.
 
-## Mount a board
+## Get started
 
-Install a checked private archive, then serve the package assets through your build.
-Installing npm files does not expose them through a web server. Copy
-`assets/pieces/*.png` and `assets/icons/*.svg` or use bundler asset URL imports.
+The package is available as a versioned archive in this repository; it is not yet
+published on npm. [Download dev.26](https://github.com/knights-eye-chess/board-ui/raw/refs/heads/dev/artifacts/knights-eye-chess-board-ui-0.1.0-dev.26.tgz),
+then install it in your app:
+
+```sh
+npm install ./knights-eye-chess-board-ui-0.1.0-dev.26.tgz
+mkdir -p public/pieces
+cp node_modules/@knights-eye-chess/board-ui/assets/pieces/*.png public/pieces/
+```
+
+This assumes your app serves `public/` at its web root. The [getting-started
+guide](docs/GETTING_STARTED.md) covers asset URLs and a browser setup without a bundler.
+
+Add a place for the board:
+
+```html
+<div id="board" style="width: min(100%, 480px)"></div>
+```
+
+Then, in your app's JavaScript:
 
 ```js
 import { mountControlledBoard } from '@knights-eye-chess/board-ui';
-import { createBoardAppearance, PIECE_CODES } from '@knights-eye-chess/board-ui/appearance';
 
-const appearance = createBoardAppearance({
-  assetUrls: Object.fromEntries(PIECE_CODES.map(piece => {
-    const file = `${piece === piece.toUpperCase() ? 'w' : 'b'}${piece.toLowerCase()}.png`;
-    return [`pieces/${file}`, `/pieces/${file}`];
-  }))
-});
 let state = {
-  position: { e1:'K', e8:'k', e2:'P' }, orientation:'white',
-  selectedSquare:null, positionKey:'root',
-  permissions:{select:true,move:true,draggable:true}, legalMoves:['e2e3','e2e4']
+  position: { e1: 'K', e8: 'k', e2: 'P' },
+  orientation: 'white',
+  positionKey: 'start',
+  selectedSquare: null,
+  permissions: { select: false, move: false },
+  legalMoves: []
 };
+
 const board = mountControlledBoard(document.querySelector('#board'), {
-  appearance, state,
-  onSelect(square) { state={...state,selectedSquare:square}; board.update(state); },
-  onMove(intent) {
-    // Validate/apply intent.uci in your chess model, then send authoritative state.
-    // Echo acceptedIntentId:intent.intentId only when accepting this exact move.
-    console.log(intent);
-  }
+  state,
+  pieceUrl: piece => `/pieces/${piece === piece.toUpperCase() ? 'w' : 'b'}${piece.toLowerCase()}.png`,
+  onSelect() {},
+  onMove() {}
 });
-board.updateAppearance({coordinates:{visible:true,size:14},animation:{durationMs:220}});
-board.updateOverlays('reference', {
-  highlights:[{square:'e4',tag:'answer-reference',color:'#a571ea'}],
-  arrows:[{from:'e2',to:'e4',label:'Reference',style:'arrow-broad-head-rounded-tail',layer:24,tag:'answer-reference'}]
-});
-board.updateOverlays('reference',null);
-board.dispose();
 ```
 
-Give the outer slot a width; the board fills it and stays square. Position keys are
-opaque occurrence tokens: change them on navigation even if placement repeats.
-`onMove` emits `{from,to,uci,promotion?,source,intentId}`. Rejection retains state.
-A matching `acceptedIntentId` suppresses duplicate drag travel. Pending IDs expire
-at three seconds or the next unrelated state update. Overlay and appearance updates
-preserve active gestures, focus and piece nodes. Position/legality/orientation changes
-cancel stale gestures and promotions. All disposals are idempotent.
+You now have a board showing two kings and a pawn. The [interactive
+example](docs/GETTING_STARTED.md#let-people-move-a-piece) adds selection and moves.
 
-## Build-time appearance and runtime selection
+## How it works
 
-`createBoardAppearance` accepts `pieceSets`, `iconSets`, `arrowStyles`, `squareThemes`
-and `assetUrls`. Names are descriptive kebab-case. Defaults are `glossy`, `quality`,
-`classic`, and `arrow-slim-point`, `arrow-broad-head`,
-`arrow-broad-head-rounded-tail`. Custom piece sets must contain all twelve FEN piece
-codes; assets accept scale/offset metadata. Icons accept assets, optional label,
-group, color and scale. Custom arrow functions return SVG path layers from supplied
-geometry. Assets/shapes are registered at build time; runtime selects registered
-names. Collisions fail unless `replaceDefaults` explicitly opts in.
+Think of Board UI as the display and controls for your chess model:
 
-`updateAppearance({pieceSet,iconSet,squareTheme,themeTokens,qualityColors,coordinates,
-animation})` changes presentation without rebuilding chess state. Themes accept
-light/dark, focus, dialog/dialogText, lastMove, selected, target and coordinate colors.
-Coordinate sizes are CSS pixels (6–48); durations are 0–1000 ms. Reduced-motion
-preferences disable animation. Quality color overrides recolor default SVG artwork;
-custom recolorable icons supply a `sourceSvg` template with `__ICON_COLOR__`.
+1. Your app sends a position, legal moves and the current selection.
+2. A player taps, drags or uses the keyboard; Board UI reports what they chose.
+3. Your app applies the move and sends the updated position back.
 
-Default classification vocabulary is exported as `DEFAULT_QUALITY_DEFINITIONS`.
-This is presentation vocabulary, not classification policy. Overlays may supply
-explicit colors/labels. `lastMoveColor` controls the translucent last-move highlight.
-Named overlay groups clear independently; state overlays remain intact.
+For a game viewer, you can also change positions directly:
 
-## Optional strip and composite viewer
+```js
+state = {
+  ...state,
+  position: { e1: 'K', e8: 'k', e4: 'P' },
+  positionKey: 'after-e4',
+  lastMove: ['e2', 'e4']
+};
+board.update(state);
+```
 
-`/move-strip` exports `mountMoveStrip`. Its controlled view contains `main`, optional
-`branches` (ID, optional parent ID, canonical anchor and moves), `selectedLine`, and
-`current`. Cursors are `{kind:'main',ply}` or `{kind:'branch',branchId,index}`. Items
-supply labels, numbers, classification/icon IDs, comments and optional copy prefixes.
-The ordered selected line includes the main prefix and all selected branch ancestors.
+The board animates the change. Your app talks to it through APIs and events;
+it does not need to manipulate the board's HTML. See the [API
+reference](docs/API.md) for the full contract.
 
-`onNavigate(cursor,{source})` requests host navigation. The strip never changes the
-chess tree. Native scroll center crossings emit requests while the pointer remains
-down. Programmatic centering does not navigate. Longer sibling variations remain
-painted without extending the selected line's native scroll range. The selected
-line's range is frozen at gesture start through finger contact and inertia, so
-a short branch cannot scroll past its last move while the user is touching it.
-`updateMove(cursor,patch)` updates late classification in place; `update`, `center`,
-`setGestureBlocked`, `getInteractionState`, `getBranchRows`, `getCurrentBounds`,
-`subscribe`, `relayout` and `dispose` expose behavior without DOM coupling. Auto-follow
-is host policy: send current state and request centering when following; genuine user
-scroll emits lifecycle events so the host can stop following.
+## Make it yours
 
-`/viewer` exports `mountBoardViewer(host,{board,moveStrip:false|options,slots?,
-moveStripPanel?,onNavigationCommand?})`. It shares appearance and coordinates board
-and strip gestures. Its API exposes board/strip updates, incremental overlays/items,
-appearance, navigation-control state, centering and disposal. Optional previous/next
-slots have package-owned click/hold behavior. Navigation keys are scoped to the host,
-ignore editors/promotion dialogs, and emit commands. Without a navigation callback,
-the board retains its square keyboard controls. Viewer `keymap` maps keys to string command IDs; `repeatableCommands` permits auto-repeat (defaults to transport commands only), and `nonRepeatingCommands` explicitly denies chosen IDs; custom commands do not repeat by default; `{}` disables shortcuts. Strip
-`keymap` likewise customizes a/b/l defaults; `figurines:false` preserves literal
-localized SAN, or supply a letter-to-glyph map. The optional vertical panel owns
-layout discovery/expansion, stylesheet and disposal; the host supplies outer slots.
+Flip the board by updating `orientation`, or change its presentation at any time:
 
-Set `classifications:false` when moves will not be classified. This removes
-classification icons and their reserved space, colors and icon labels, including
-late classification patches. Moves use `--move-strip-text` (falling back to `--ink`
-and then black), so the host's dark/light theme controls ordinary text color.
-SAN, numbering, PGN annotations, comments and starting artwork remain available.
-The default keeps space for arriving classification icons without shifting moves.
+```js
+board.updateAppearance({
+  themeTokens: { light: '#f1e4d1', dark: '#b88763' },
+  coordinates: { visible: false },
+  animation: { durationMs: 200 }
+});
 
-## Styling and automation surface
+board.updateOverlays('suggestions', {
+  arrows: [{ from: 'e2', to: 'e4', label: 'Pawn advance',
+    style: 'arrow-broad-head-rounded-tail', color: '#31715e' }]
+});
+```
 
-Board parts: `board`, `square`, `last-move`, `selected`, `target`, `highlight`,
-`piece-image`, `badge`, `arrow`. Stable attributes: `data-square`, arrow `data-uci`,
-`data-arrow-tag`, highlight `data-highlight-tag`; square classes `last`/`selected`
-and strip `data-cursor`/`aria-current` identify state for tests. Do not use internal
-classes to implement host behavior. Runtime theme tokens are the primary board
-styling API. Strip inherits `--font-ui`, `--move-font`, `--card`, `--secondary`,
-`--line`, `--played`, `--muted`, `--green`, and supports `--move-strip-surface`,
-`--move-strip-hover`, `--move-strip-focus` and `--move-quality-text`.
+Bundled artwork and styles are ready to use. You can also add named piece sets,
+icon sets, arrow shapes and square themes when building your app, then select them
+through the API. The [appearance guide](docs/APPEARANCE.md) shows how.
 
-## Build and verification
+## Add a moves strip
 
-Node 24+: `npm ci`, `npm run check`, `npm run test:browser`, `npm run pack:checked`.
-Use `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium` for system Chromium.
-Tests cover original arrow geometry, extensions, transitions, drag intent acceptance,
-promotion, live strip scrolling, nested branches and incremental updates. Desktop
-and 375px Chromium are qualified; real iOS/touch hardware remains unqualified.
-Archives are immutable: bump the version before producing different bytes.
+The optional moves strip displays move numbers, notation and nested variations.
+People can tap a move or swipe through a line to navigate the game. Use
+`mountBoardViewer` to combine it with a board, or `mountMoveStrip` on its own.
 
-Panel `classNames` (column/panel/viewport/expand/dialog) and `labels` (panel/viewport/expand/dialog) are optional host choices. Defaults use generic board-ui classes. Component-owned styling supports `--board-strip-line`, `--board-strip-surface`, `--board-strip-accent`, `--board-strip-text`, `--board-strip-dialog`; legacy `--line`, `--secondary`, `--green`, `--ink`, `--dialog-surface` remain fallbacks. Board drag defers an existing strip gesture; it does not cancel that gesture. Palette overrides are validated before initial painting and before an appearance update.
+Choose the presentation that fits your app:
+
+| Plain game viewer | Analysis app |
+| --- | --- |
+| `classifications: false` | Classifications enabled by default |
+| Compact moves in your theme's normal text color | Move-quality colors and icons |
+| No space reserved for icons | Reserved space keeps moves steady as analysis arrives |
+
+See the [moves-strip guide](docs/MOVE_STRIP.md) for a complete board-and-strip
+example. The [three-board demo](examples/demos/README.md) shows shared navigation,
+including Up/Down to switch branches.
+
+## Documentation and development
+
+- [Getting started](docs/GETTING_STARTED.md): installation, assets and your first interactive board.
+- [Appearance](docs/APPEARANCE.md): themes, custom artwork, arrows and badges.
+- [Moves strip](docs/MOVE_STRIP.md): plain/classified moves, variations and navigation.
+- [API reference](docs/API.md): state, callbacks, gestures and styling options.
+- [Development](docs/DEVELOPMENT.md): run the demos, build and test.
+
+To explore locally, use Node 24 or newer:
+
+```sh
+git clone --branch dev https://github.com/knights-eye-chess/board-ui.git
+cd board-ui
+npm ci
+npm ci --prefix examples/demos
+npm run demo:serve
+```
+
+Open `http://localhost:4173`. The demos include an integration walkthrough and
+their source code.
+
+## Licenses and credits
+
+Board UI code is **[MIT](LICENSE)**. The bundled and original demo artwork is
+**[CC BY 4.0](LICENSE-ARTWORK)**; credit Knight's Eye contributors when reusing it.
+
+The three-board demo uses chessops and is distributed under **GPL-3.0-or-later**,
+with its corresponding source available from the demo footer. The standalone
+library and appearance gallery retain their MIT terms. See [licensing
+details](LICENSING.md) and [artwork credits](assets/README.md).
