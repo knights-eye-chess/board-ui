@@ -133,6 +133,13 @@ the board retains its square keyboard controls. Viewer `keymap` maps keys to str
 localized SAN, or supply a letter-to-glyph map. The optional vertical panel owns
 layout discovery/expansion, stylesheet and disposal; the host supplies outer slots.
 
+Set `classifications:false` when moves will not be classified. This removes
+classification icons and their reserved space, colors and icon labels, including
+late classification patches. Moves use `--move-strip-text` (falling back to `--ink`
+and then black), so the host's dark/light theme controls ordinary text color.
+SAN, numbering, PGN annotations, comments and starting artwork remain available.
+The default keeps space for arriving classification icons without shifting moves.
+
 ## Styling and automation surface
 
 Board parts: `board`, `square`, `last-move`, `selected`, `target`, `highlight`,

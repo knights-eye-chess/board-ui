@@ -54,6 +54,10 @@ exercise underpromotion and both castling sides. Board drag events coordinate
 `setGestureBlocked` on the shared strip; strip gestures cancel board gestures via
 the viewer API. Component internals are not queried by host logic. Expand **See
 the integration** for the bounded live event log, model snapshot and API example.
+Up/Down switches between visible branch rows from either a board or a focused
+strip move, preserving ply where possible. The host uses `getBranchRows()` and
+its chessops tree; it does not read component internals. This demo sets
+`classifications:false` for compact moves in ordinary dark/light theme text.
 
 ## Make it yours
 

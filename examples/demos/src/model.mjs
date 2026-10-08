@@ -73,7 +73,8 @@ export class DemoGame {
     this.selected = null;
     return true;
   }
-  command(command) {
+  command(command, rows = {}) {
+    if (command === 'branchUp' || command === 'branchDown') return this.switchBranch(command === 'branchUp' ? -1 : 1, rows);
     let target = this.current;
     if (command === 'previous') target = target.data.parent || target;
     if (command === 'next') target = this.next(target) || target;
@@ -85,6 +86,29 @@ export class DemoGame {
     return true;
   }
   next(node) { return this.preferredNext.get(node.data.id) || node.children[0]; }
+  /** Rendered row positions come from the strip API; chess navigation stays here. */
+  switchBranch(direction, rows) {
+    const ply = node => { let depth=0; for(;node.data.parent;node=node.data.parent) depth++; return depth; };
+    const entries=this.branches.filter(branch=>Number.isFinite(rows[branch.id])).map(branch=>({
+      ...branch,top:rows[branch.id],base:ply(this.cursors.get(cursorKey(branch.moves[0].cursor)))-1,
+    }));
+    const cursor=this.current.data.cursor,absolute=ply(this.current),current=entries.find(b=>cursor.kind==='branch'&&b.id===cursor.branchId);
+    const currentTop=current?.top??-Infinity;
+    const candidates=entries.filter(b=>b!==current&&(b.top-currentTop)*direction>0&&absolute>b.base&&absolute<=b.base+b.moves.length)
+      .sort((a,b)=>direction*(a.top-b.top));
+    if(candidates.length)return this.navigate(candidates[0].moves[absolute-candidates[0].base-1].cursor);
+    if(direction<0){
+      if(!current)return false;
+      if(absolute<this.main.length)return this.navigate(this.main[absolute].cursor);
+      // Beyond the main line, return to the move where this branch diverged.
+      return this.navigate(current.anchor);
+    }
+    const boundary=current?.base??0;
+    const children=entries.filter(b=>b!==current&&b.top>currentTop&&b.base<=absolute&&b.base>=boundary&&
+      ((b.parentId||'')===(current?.id||'')||current&&b.base===boundary&&(b.parentId||'')===(current.parentId||'')))
+      .sort((a,b)=>b.base-a.base||a.top-b.top);
+    return children.length?this.navigate(children[0].moves[0].cursor):false;
+  }
   rememberPath(node) {
     for (let child = node; child.data.parent; child = child.data.parent) {
       this.preferredNext.set(child.data.parent.data.id, child);

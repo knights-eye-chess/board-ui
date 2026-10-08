@@ -58,6 +58,27 @@ test('previous, next and end retain the chosen nested variation',()=>{
   game.command('start');game.command('end');assert.equal(game.summary().move,'Bc5');
 });
 
+test('vertical branch navigation preserves ply and handles nested boundaries',()=>{
+  const game=new DemoGame(),early=game.branches.find(b=>b.anchor.kind==='main'&&b.anchor.ply===4),
+    later=game.branches.find(b=>b.anchor.kind==='main'&&b.anchor.ply===6),nested=game.branches.find(b=>b.parentId);
+  const rows={[early.id]:40,[later.id]:80,[nested.id]:120};
+  game.navigate(game.main[6].cursor);
+  assert.equal(game.command('branchDown',rows),true);assert.deepEqual(game.current.data.cursor,early.moves[2].cursor);
+  game.command('branchDown',rows);assert.deepEqual(game.current.data.cursor,later.moves[0].cursor);
+  game.command('branchDown',rows);assert.deepEqual(game.current.data.cursor,nested.moves[0].cursor); // Later fork fallback.
+  game.command('branchUp',rows);assert.deepEqual(game.current.data.cursor,later.moves[1].cursor);
+  game.command('branchUp',rows);assert.deepEqual(game.current.data.cursor,early.moves[3].cursor);
+  game.command('branchUp',rows);assert.deepEqual(game.current.data.cursor,game.main[7].cursor);
+  assert.equal(game.command('branchUp',rows),false);
+  game.navigate(nested.moves[1].cursor);game.command('start');game.command('end');
+  assert.deepEqual(game.current.data.cursor,nested.moves[1].cursor,'chosen variation survives navigation');
+  assert.equal(game.command('branchDown',rows),false,'last visible row has no downward destination');
+  assert.equal(game.command('branchUp',{}),false,'no rendered row means no branch command');
+  const long=new DemoGame('1. e4 e5 (1... c5 2. Nf3 d6 3. d4) *'),branch=long.branches[0];
+  long.navigate(branch.moves.at(-1).cursor);long.command('branchUp',{[branch.id]:40});
+  assert.deepEqual(long.current.data.cursor,long.main[2].cursor,'beyond main line returns to divergence');
+});
+
 test('castling retains conventional destinations and moves both pieces',()=>{
   const game=new DemoGame(SCENARIOS.castling);
   assert.ok(game.board().legalMoves.includes('e1g1'));

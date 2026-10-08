@@ -87,6 +87,26 @@ test('controlled strip resolves live center crossings, bounds selected range, an
     assert.equal(await page.locator('#disabled > div .san').nth(1).textContent(),'♘f1','a custom figurine map replaces listed letters');
     await page.locator('#custom > div button[data-cursor="m:1"]').focus();await page.keyboard.press('x');await page.keyboard.press('ArrowUp');await page.keyboard.press('a');assert.deepEqual(await page.evaluate(()=>window.customCommands),['export-fen','parent-line']);
     await page.locator('#disabled > div button[data-cursor="m:1"]').focus();await page.keyboard.press('b');assert.deepEqual(await page.evaluate(()=>window.disabledCommands),[],'empty keymap disables app commands');
-    await page.evaluate(()=>{window.customStrip.dispose();window.disabledStrip.dispose();});await page.close();
+    await page.evaluate(async initial=>{
+      const {mountMoveStrip}=await import('/move-strip.js');const host=document.createElement('div');host.id='plain';host.style.cssText='width:320px;--ink:#111111';document.body.append(host);
+      window.plainStrip=mountMoveStrip(host,{view:initial,classifications:false,onNavigate(){},appearance:{resolveIcon(){throw Error('Plain mode must not resolve classification icons')}}});
+    },view);
+    const plain=page.locator('#plain button[data-cursor="m:1"]'),classified=page.locator('#custom button[data-cursor="m:1"]');
+    assert.equal(await page.locator('#plain .icon-slot').count(),0);
+    const plainWidth=(await plain.boundingBox()).width;
+    assert.ok((await classified.boundingBox()).width>=plainWidth+14,'default mode reserves icon width');
+    await plain.focus();
+    await page.evaluate(()=>window.plainStrip.updateMove({kind:'main',ply:1},{classification:'best',iconId:'quality',iconLabel:'Best move',color:'#ff0000',comment:'Move comment'}));
+    assert.equal((await plain.boundingBox()).width,plainWidth,'late assessment cannot add spacing in plain mode');
+    assert.equal(await plain.getAttribute('data-classification'),null);
+    assert.equal(await plain.getAttribute('aria-label'),'1 . Nf1');
+    assert.equal(await plain.getAttribute('title'),'Move comment');
+    assert.equal(await plain.evaluate(b=>getComputedStyle(b).color),'rgb(17, 17, 17)');
+    assert.equal(await plain.evaluate(b=>b===b.getRootNode().activeElement),true,'late patch preserves focus');
+    await page.locator('#plain').evaluate(h=>h.style.setProperty('--ink','#ffffff'));
+    assert.equal(await plain.evaluate(b=>getComputedStyle(b).color),'rgb(255, 255, 255)');
+    await page.locator('#plain').evaluate(h=>h.style.setProperty('--move-strip-text','#123456'));
+    assert.equal(await plain.evaluate(b=>getComputedStyle(b).color),'rgb(18, 52, 86)');
+    await page.evaluate(()=>{window.plainStrip.dispose();window.customStrip.dispose();window.disabledStrip.dispose();});await page.close();
   }}finally{await browser.close();server.close();}
 });

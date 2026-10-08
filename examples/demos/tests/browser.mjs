@@ -33,6 +33,11 @@ try {
     await page.locator('#theme-toggle').click();
     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
     assert.equal(await page.locator('#theme-toggle').getAttribute('aria-pressed'),'true');
+    assert.equal(await page.locator('#shared-strip .icon-slot').count(),0);
+    const stripText=()=>page.locator('#shared-strip .san').first().evaluate(e=>getComputedStyle(e).color);
+    assert.equal(await stripText(),'rgb(232, 240, 234)');
+    await page.locator('#theme-toggle').click();assert.equal(await stripText(),'rgb(34, 49, 46)');
+    await page.locator('#theme-toggle').click();
     assert.equal(await page.locator('#black-viewer .sq').first().getAttribute('data-square'),'h1');
     await move('white','e2','e4');assert.equal(await current(),'e4');
     await move('black','e7','e5');assert.equal(await current(),'e5');
@@ -57,6 +62,17 @@ try {
     const nested=page.locator('#shared-strip .branch-segment.nested button').filter({has:page.locator('.san',{hasText:'d3'})}).first();
     await nested.click();assert.equal(await current(),'d3');
     for(const view of ['white','black','mini'])assert.equal(await sq(view,'d3').locator('img[data-piece="P"]').count(),1);
+    // Navigate adjacent visible rows from each board, retaining the same ply.
+    for(const [view,expected] of [['white','O-O'],['black','Nf3'],['mini','Ba4']]){
+      await sq(view,'e4').focus();await page.keyboard.press('ArrowUp');assert.equal(await current(),expected);
+    }
+    await page.locator('#shared-strip button[aria-current="true"]').focus();
+    for(const expected of ['Nf3','O-O','d3']){
+      await page.keyboard.press('ArrowDown');assert.equal(await current(),expected);
+      assert.equal(await page.locator('#shared-strip button[aria-current="true"]').evaluate(b=>b===b.getRootNode().activeElement),true);
+    }
+    await page.keyboard.press('ArrowRight');await page.keyboard.press('Enter');assert.equal(await current(),'Bc5');
+    for(const view of ['white','black','mini'])assert.equal(await sq(view,'c5').locator('img[data-piece="b"]').count(),1);
     await page.locator('#scenario').selectOption('promotion');await move('mini','a7','a8');
     await page.getByRole('button',{name:'Promote to knight'}).click();
     assert.equal(await page.locator('#status').textContent(),'Draw: insufficient material');
@@ -136,7 +152,7 @@ try {
     for(const file of ['LICENSE','LICENSE-GPL','LICENSE-ARTWORK','THIRD-PARTY.txt','source/board-ui-demo-source.tar.gz']) {
       const response=await page.request.get(base+'/'+file);assert.equal(response.status(),200,file);
     }
-    results.push({engine,width,iconSetRoundTrips:true,replayGridGeometry:true,pagesSubpath:true,sourceDownload:true,licenseFiles:true,sharedFullWidthStrip:true,darkModePersistence:true,synchronized:true,nestedVariation:true,drag:true,underpromotion:true,castling:true,keyboard:true,customAssets:true,customArrow:true,coordinates:true,animation:true,overflow:false,externalRequests:outside,pageErrors:errors});await page.close();
+    results.push({engine,width,branchKeyboard:true,plainMoves:true,iconSetRoundTrips:true,replayGridGeometry:true,pagesSubpath:true,sourceDownload:true,licenseFiles:true,sharedFullWidthStrip:true,darkModePersistence:true,synchronized:true,nestedVariation:true,drag:true,underpromotion:true,castling:true,keyboard:true,customAssets:true,customArrow:true,coordinates:true,animation:true,overflow:false,externalRequests:outside,pageErrors:errors});await page.close();
   }
 } finally {await browser.close();await new Promise(resolve=>server.close(resolve))}
 writeFileSync(out+'browser-results.json',JSON.stringify(results,null,2)+'\n');console.log(JSON.stringify(results));

@@ -24,7 +24,7 @@ function render(source=-1,intentId) {
   document.querySelector('#current-move').textContent=data.move;snapshot.textContent=JSON.stringify(data,null,2);
 }
 function command(source,command) {
-  if(game.command(command)){record(source,'command',{command});render()}
+  if(game.command(command,sharedStrip.getBranchRows())){record(source,'command',{command});render()}
 }
 function dragState(i,active) {
   if(active)dragging.add(i);else dragging.delete(i);
@@ -45,14 +45,14 @@ configs.forEach((config,i)=>{
     },
     moveStrip:false,
     slots:{board:host.querySelector('[data-board]'),...(i===0?{previous:document.querySelector('#shared-prev'),next:document.querySelector('#shared-next')}:{})},
-    keymap:{ArrowLeft:'previous',ArrowRight:'next',Home:'start',End:'end'},
+    keymap:{ArrowLeft:'previous',ArrowRight:'next',ArrowUp:'branchUp',ArrowDown:'branchDown',Home:'start',End:'end'},
     onNavigationCommand(id){command(config.name,id)},
   }));
 });
 sharedStrip=mountMoveStrip(document.querySelector('#shared-strip'),{
-  view:game.strip(),figurines:false,
+  view:game.strip(),figurines:false,classifications:false,
   onNavigate(cursor,details){if(game.navigate(cursor)){record('Shared strip','onNavigate',{cursor,source:details.source});render()}},
-  onCommand(id){command('Shared strip',id)},keymap:{Home:'start',End:'end'},
+  onCommand(id){command('Shared strip',id)},keymap:{ArrowUp:'branchUp',ArrowDown:'branchDown',Home:'start',End:'end'},
   onGestureStart(){viewers.forEach(view=>view.cancelBoardGesture())},
 });
 document.querySelector('#scenario').addEventListener('change',event=>{
