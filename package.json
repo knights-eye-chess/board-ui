@@ -1,6 +1,6 @@
 {
   "name": "@knights-eye-chess/board-ui",
-  "version": "0.1.0-dev.22",
+  "version": "0.1.0-dev.23",
   "private": true,
   "type": "module",
   "description": "Controlled engine-free chess board UI with host-owned position and legality",
@@ -48,7 +48,13 @@
     "npm-shrinkwrap.json",
     "vendor",
     "SOURCE-ORIGIN.json",
-    "scripts"
+    "scripts",
+    "LICENSE",
+    "NOTICE",
+    "LICENSING.md",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses",
+    "LICENSE-ARTWORK"
   ],
   "sideEffects": false,
   "engines": {
@@ -71,5 +77,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/knights-eye-chess/board-ui.git"
-  }
+  },
+  "license": "MIT"
 }

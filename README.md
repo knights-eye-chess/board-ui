@@ -1,11 +1,13 @@
 # Knight's Eye Board UI
 
+First-party code: **MIT**. Packaged artwork: **CC BY 4.0**. See [LICENSING.md](LICENSING.md) for scope and third-party terms.
+
 Controlled, framework-free chess presentation: board, pieces, arrows, classification
 icons, animation, interaction, and an optional moves strip. The host supplies chess
 state and handles events. No engine, classifier, game-tree implementation, account,
 or persistence service is required.
 
-Private preview; no public publication or license grant.
+Private preview; licensed as described above. No public registry publication has been performed.
 See [visual contract](docs/VISUAL-CONTRACT.md) and [asset provenance](assets/README.md).
 
 ## Ownership

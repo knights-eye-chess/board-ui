@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-08",
+  "issue": "https://github.com/knights-eye-chess/knightseye-net/issues/17",
+  "checks": {
+    "package": "@knights-eye-chess/board-ui",
+    "version": "0.1.0-dev.23",
+    "codeLicense": "MIT",
+    "unchangedRuntimeAndArtworkFiles": 72,
+    "archiveSha256": "28ec02ac972755c95a37493209b909396c844ec00ab95b3b87c1b68cb3242abd",
+    "licenseAndNoticeFilesPresent": true
+  },
+  "previousArtifact": "knights-eye-chess-board-ui-0.1.0-dev.22.tgz",
+  "sourceCheck": "npm ci and npm run pack:checked; see issue summary for installed artifact qualification",
+  "publication": "not performed",
+  "installedConsumerTests": {
+    "name": "@knights-eye-chess/board-ui",
+    "version": "0.1.0-dev.23",
+    "files": 5,
+    "passed": 15,
+    "failed": 0
+  },
+  "consumerTestHarness": "Independent npm install of six exact archives with TypeScript 5.9.3, esbuild 0.28.0 and Playwright 1.62.1; no package symlinks."
+}

@@ -1,0 +1,40 @@
+# Licensing
+
+The owner approved this license on 2026-10-08. First-party source code, tests,
+build tools and documentation in this repository are licensed under **MIT**,
+with the full terms in [LICENSE](LICENSE). Copyright (c) 2026 Knight's Eye
+contributors. This grant excludes artwork and third-party material described below.
+
+## Artwork — CC BY 4.0
+
+The owner-controlled artwork listed below is licensed under Creative Commons
+Attribution 4.0 International, separately from code. The full legal text is in
+[LICENSE-ARTWORK](LICENSE-ARTWORK).
+
+Attribute it as **“Knight’s Eye artwork — Knight’s Eye contributors,
+CC BY 4.0”**, link to https://github.com/knights-eye-chess/board-ui and
+https://creativecommons.org/licenses/by/4.0/, and identify any modifications.
+For an app, credits/about documentation is a reasonable attribution location.
+Keep supplied provenance and attribution notices when redistributing the assets.
+The split records identify exact source bytes, not individual original artists;
+this notice does not invent individual authorship. Project names/logos may be
+subject to trademark rights; the copyright license grants no trademark rights
+or endorsement.
+
+Covered assets: `assets/pieces/` and the classification SVG artwork
+in `assets/icons/`. `assets/PIECES.json` and `assets/icons/ICONS.json` retain
+byte provenance. Theme/arrow renderer source is code under MIT.
+
+## Dependencies and release history
+
+Installed third-party code, `vendor/` archives and copied dependency notices
+retain their original terms. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+and `licenses/third-party/` for the installed production dependency inventory and
+available upstream notices. This is an inventory, not a new license grant over
+third-party material. Existing attribution/license files take precedence.
+
+Historical committed archives and qualification receipts are unchanged. This
+license decision is recorded in current source and newly versioned artifacts;
+do not assume old archives contain these notices. Repository visibility, public
+registry publication, contributor agreements and support commitments are separate
+release decisions. No public registry publication is performed by this change.
