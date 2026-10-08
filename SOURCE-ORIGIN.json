@@ -4,10 +4,16 @@
   "sourcePath": "packages/chess-board",
   "version": "0.1.0-dev.2",
   "previousArtifactVersion": "0.1.0-dev.1",
-  "ownership": "Owner-approved first-party code license: MIT; see LICENSING.md. Public release remains a separate decision.",
+  "ownership": "Owner-approved first-party code license: MIT; see LICENSING.md. Public source repository and demo hosting are approved; npm publication remains separate.",
   "licenseDecision": {
     "date": "2026-10-08",
     "code": "MIT",
     "artwork": "CC-BY-4.0"
+  },
+  "publicationDecision": {
+    "date": "2026-10-08",
+    "repository": "public",
+    "staticDemos": "public GitHub Pages",
+    "npm": "not performed"
   }
 }

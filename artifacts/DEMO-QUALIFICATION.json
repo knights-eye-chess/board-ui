@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-08",
+  "version": "0.1.0-dev.24",
+  "archive": "knights-eye-chess-board-ui-0.1.0-dev.24.tgz",
+  "sha256": "ffe4fe1262279ba723224e9b73453af524be9db5f67dafff8deb7905b560ec3e",
+  "issue": "https://github.com/knights-eye-chess/board-ui/issues/2",
+  "codeLicense": "MIT",
+  "artworkLicense": "CC-BY-4.0",
+  "combinedSynchronizedDemoLicense": "GPL-3.0-or-later",
+  "runtimeDependencies": {
+    "library": {},
+    "gallery": {},
+    "sync": {
+      "chessops": "0.15.1",
+      "@badrap/result": "0.3.1"
+    }
+  },
+  "checks": {
+    "sourcePackageTests": 15,
+    "independentlyInstalledArchiveTests": 15,
+    "demoModelTests": 5,
+    "browserWidths": [
+      1440,
+      390
+    ],
+    "pagesSubpath": "/board-ui/",
+    "pageErrors": 0,
+    "failedRuntimeRequests": 0,
+    "externalRuntimeRequests": 0,
+    "sourceOnlyExampleArchive": true,
+    "unchangedLibrarySourceRuntimeArtworkFiles": 70,
+    "correspondingSourceRebuild": "Exact JS, pages, styles and license notices reproduced from downloaded source archive."
+  },
+  "browserChecks": [
+    {
+      "width": 1440,
+      "pagesSubpath": true,
+      "sourceDownload": true,
+      "licenseFiles": true,
+      "sharedFullWidthStrip": true,
+      "darkModePersistence": true,
+      "synchronized": true,
+      "nestedVariation": true,
+      "drag": true,
+      "underpromotion": true,
+      "castling": true,
+      "keyboard": true,
+      "customAssets": true,
+      "customArrow": true,
+      "coordinates": true,
+      "animation": true,
+      "overflow": false,
+      "externalRequests": [],
+      "pageErrors": []
+    },
+    {
+      "width": 390,
+      "pagesSubpath": true,
+      "sourceDownload": true,
+      "licenseFiles": true,
+      "sharedFullWidthStrip": true,
+      "darkModePersistence": true,
+      "synchronized": true,
+      "nestedVariation": true,
+      "drag": true,
+      "underpromotion": true,
+      "castling": true,
+      "keyboard": true,
+      "customAssets": true,
+      "customArrow": true,
+      "coordinates": true,
+      "animation": true,
+      "overflow": false,
+      "externalRequests": [],
+      "pageErrors": []
+    }
+  ],
+  "limits": [
+    "Real iOS/touch hardware not tested.",
+    "No npm registry publication.",
+    "The application retains qualified board-ui dev.23; only demos/documentation are added.",
+    "Historical archive bytes preserved; old previews can contain generated example payloads."
+  ]
+}

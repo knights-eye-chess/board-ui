@@ -7,8 +7,16 @@ icons, animation, interaction, and an optional moves strip. The host supplies ch
 state and handles events. No engine, classifier, game-tree implementation, account,
 or persistence service is required.
 
-Private preview; licensed as described above. No public registry publication has been performed.
+Open-source component; licensed as described above. No public registry publication has been performed.
 See [visual contract](docs/VISUAL-CONTRACT.md) and [asset provenance](assets/README.md).
+
+## Playground demos
+
+[One game, three views and Make it yours](examples/demos/README.md) demonstrate
+three synchronized boards with one full-width moves strip, build-time appearance
+extensions and runtime controls. Both pages include a dark/light switch.
+Framework-free; the synchronized demo uses Lichess chessops 0.15.1 and its PGN variation tree.
+The appearance gallery and Board UI library have no runtime dependencies.
 
 ## Ownership
 

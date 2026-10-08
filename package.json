@@ -1,6 +1,6 @@
 {
   "name": "@knights-eye-chess/board-ui",
-  "version": "0.1.0-dev.23",
+  "version": "0.1.0-dev.24",
   "private": true,
   "type": "module",
   "description": "Controlled engine-free chess board UI with host-owned position and legality",
@@ -67,7 +67,11 @@
     "docs:screenshot": "node examples/capture-screenshot.mjs",
     "check": "npm run build && npm test",
     "pack:checked": "npm run check && node scripts/pack.mjs",
-    "pack:artifact": "node scripts/pack.mjs"
+    "pack:artifact": "node scripts/pack.mjs",
+    "demo:build": "npm run build && node examples/demos/build.mjs",
+    "demo:serve": "npm run demo:build && node examples/demos/serve.mjs",
+    "demo:test": "node --test examples/demos/tests/*.test.mjs",
+    "demo:check": "npm run demo:build && npm run demo:test && node examples/demos/tests/browser.mjs"
   },
   "devDependencies": {
     "esbuild": "0.28.0",

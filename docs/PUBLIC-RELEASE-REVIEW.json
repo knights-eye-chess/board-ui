@@ -1,0 +1,37 @@
+{
+  "ref": "origin/dev",
+  "commit": "19b3e139e63d74d881a806cc0680ec6f7f4538ca",
+  "date": "2026-10-08",
+  "counts": {
+    "gitBlobs": 222,
+    "textPayloads": 417,
+    "archiveFiles": 1701,
+    "nestedArchives": 16
+  },
+  "credentialPatternFindings": [],
+  "sensitivePathFindings": [],
+  "historicalArtifactPayloadFamilies": [
+    "README.md",
+    "SOURCE-ORIGIN.json",
+    "assets",
+    "build.mjs",
+    "dist",
+    "docs",
+    "examples",
+    "licenses",
+    "npm-shrinkwrap.json",
+    "package.json",
+    "scripts",
+    "src",
+    "tests"
+  ],
+  "scope": "Published dev history and recursively unpacked historical artifacts; uncommitted/stashed work is not on GitHub.",
+  "method": "Credential-pattern and sensitive-path scan of reachable remote dev blobs and recursively unpacked historical archives; review of tracked files, screenshot and public issue bodies.",
+  "historicalArtifactNote": "Earlier archives include generated playground output and installed example dependencies. Dev.24 excludes demos/dist and demos/node_modules; historical bytes remain immutable. These preview archives are not the public Pages payload.",
+  "licensing": "Current first-party source is MIT; owner-controlled artwork CC BY 4.0; combined chessops demo distribution subject to GPL-3.0-or-later with corresponding source. Earlier commits without license files need no history rewrite; grants for removed historical code should be stated explicitly if needed.",
+  "ownerActionsObserved": {
+    "date": "2026-10-08",
+    "repositoryVisibility": "public",
+    "pagesBuildType": "workflow"
+  }
+}

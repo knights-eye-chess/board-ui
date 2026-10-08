@@ -1,0 +1,9 @@
+{
+  "name": "board-ui-demos",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "chessops": "0.15.1"
+  },
+  "license": "MIT"
+}

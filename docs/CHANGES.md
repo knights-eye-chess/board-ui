@@ -130,3 +130,19 @@ longer main/sibling branches no longer reopen scrolling beyond its endpoint.
 Center feedback cannot resize the active range. Internal range-clamp events are
 programmatic, so they do not acquire manual ownership. CDP touch regression
 checks the actual scrollWidth/clientWidth limit while held and after release.
+
+## Dev.24: public playground demos
+
+The synchronized demo uses Lichess chessops's actual PGN nodes and one full-width
+moves strip shared by White, Black and miniature boards. Legal play, nested
+variation navigation, chosen-line transport, castling and underpromotion update
+all three through public APIs/events. The customization gallery registers named
+piece/icon/arrow/theme extensions and exposes runtime controls. A persisted
+light/dark switch is shared across pages.
+
+Demo dependencies are isolated: chessops 0.15.1 and @badrap/result 0.3.1. The
+library and appearance gallery add zero runtime dependencies. Our source retains
+MIT; the combined synchronized demo satisfies chessops's GPL terms with visible
+notices and a downloadable corresponding-source tree. Default/custom artwork
+retains CC BY 4.0. The manual Pages workflow publishes only the static site.
+The app keeps its qualified dev.23 library; library runtime behavior is unchanged.

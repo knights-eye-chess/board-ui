@@ -16,6 +16,7 @@ labels/groups are exported from `/appearance`; hosts decide classification and
 may override presentation. Chat-specific raster assets and the alternate SVG
 piece set remain application presentation outside this default board set.
 
-The repository and package remain private. Artwork rights and attribution for
-public release remain part of the existing publication checkpoint; inclusion
-here does not establish a new public license or invent authorship attribution.
+The owner approved CC BY 4.0 for this artwork on 2026-10-08. See
+[LICENSING.md](../LICENSING.md) for the grant and attribution requirements.
+The owner made the repository public; public demo hosting is separately approved.
+The byte-provenance records do not establish individual artist identity.

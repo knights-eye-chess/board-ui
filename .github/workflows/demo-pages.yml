@@ -1,0 +1,58 @@
+name: Deploy demo playground to Pages
+on:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: Publish to Pages (requires Pages enabled)
+        type: boolean
+        default: true
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: demo-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            npm-shrinkwrap.json
+            examples/demos/package-lock.json
+      - run: npm ci
+      - run: npm ci --prefix examples/demos
+      - run: npx playwright install --with-deps chromium
+      - run: npm run demo:check
+      - name: Build public static site
+        run: npm run demo:build
+      - name: Save qualified static preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: board-ui-demos
+          path: examples/demos/dist
+          retention-days: 7
+      - name: Configure Pages
+        if: ${{ inputs.deploy }}
+        uses: actions/configure-pages@v5
+      - name: Upload site
+        if: ${{ inputs.deploy }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: examples/demos/dist
+  deploy:
+    if: ${{ inputs.deploy }}
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,12 @@
+{
+  "name": "chessops",
+  "version": "0.15.1",
+  "license": "GPL-3.0-or-later",
+  "repository": "https://github.com/niklasf/chessops",
+  "gitHead": "4a4cbd5ac6159adfb236a2616701253ae4c58b2d",
+  "tag": "v0.15.1",
+  "npmIntegrity": "sha512-hQDwv90AFkrPEsRJBebh3ZE+xDga25TCCv4lavNT2plZmd33UKNFYaZsE+7rafMbnBRrDEWUVsSYFqY3qCIGZw==",
+  "tsconfigSource": "https://raw.githubusercontent.com/niklasf/chessops/4a4cbd5ac6159adfb236a2616701253ae4c58b2d/tsconfig.json",
+  "note": "Unmodified dependency source and compiled modules are copied from the lock-verified npm installation; tsconfig is from the exact npm gitHead/tag.",
+  "tsconfigSha256": "3c252d083269bf3f43b95d1900e8611d2c66d7822bd26125962a66af734aac96"
+}

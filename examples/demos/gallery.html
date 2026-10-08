@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Make it yours · Board UI</title><link rel="icon" type="image/svg+xml" href="./assets/custom/pieces/wn.svg"><script src="./theme.js"></script><link rel="stylesheet" href="./style.css"><script type="module" src="./gallery.js"></script></head><body>
+<header><nav aria-label="Demo navigation"><a class="brand" href="./index.html">Board UI / Playground</a><a href="./index.html">Three views</a><a href="./gallery.html" aria-current="page">Make it yours</a><button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">Dark mode</button></nav></header><main><div class="eyebrow">Your assets. Your shapes. Your board.</div><h1>Make it yours.</h1><p class="intro">Switch between bundled defaults and a custom collection. Themes, pieces, icon artwork and arrow geometry are independent—mix them however you like.</p>
+<div class="gallery"><section class="card"><div id="gallery-viewer"><div class="board-slot" data-board></div><div class="strip-slot" data-strip></div></div><p class="hint">Select squares and browse the icon samples. This is a presentation gallery; the labels are artwork examples, not engine assessments.</p></section>
+<section class="card"><h2>Appearance</h2><form id="appearance-controls" class="control-grid">
+<label>Square theme<select name="theme"><option value="classic">Classic (bundled)</option><option value="midnight">Midnight</option><option value="mint">Mint</option><option value="warm-sand">Warm sand</option></select></label>
+<label>Piece set<select name="pieces"><option value="glossy">Glossy (bundled)</option><option value="outlined-silhouette">Outlined silhouette (custom)</option></select></label>
+<label>Classification icons<select name="icons"><option value="quality">Quality (bundled)</option><option value="diamond-marks">Diamond marks (custom)</option></select></label>
+<label>Arrow shape<select name="arrow"><option value="arrow-broad-head-rounded-tail">Broad head · rounded tail</option><option value="arrow-slim-point">Slim point</option><option value="arrow-broad-head">Broad head</option><option value="arrow-chevron-head">Chevron head (custom)</option></select></label>
+<label>Perspective<select name="orientation"><option value="white">White</option><option value="black">Black</option></select></label><label>Arrow color<input name="color" type="color" value="#8b5cf6"></label>
+<label class="checkbox"><input name="coordinates" type="checkbox" checked>Show coordinates</label><label class="checkbox"><input name="arrows" type="checkbox" checked>Show arrows</label>
+<label>Coordinate size <output id="coordinate-size"></output><input name="size" aria-label="Coordinate size" type="range" min="6" max="48" value="12"></label>
+<label>Animation duration <output id="animation-duration"></output><input name="animation" aria-label="Animation duration" type="range" min="0" max="1000" step="50" value="200"></label>
+</form><button id="replay" class="replay">Replay knight move</button><p class="gallery-copy">The custom icon set also adds <strong>Saved idea</strong>, a host-defined bookmark icon shown on e4. Coordinates stay accessible when printed labels are hidden.</p></section></div>
+<details class="inspect" open><summary>See the integration</summary><div class="code-grid"><section><h3>Register once at build time</h3><pre>const appearance = createBoardAppearance({
+  pieceSets: {
+    'outlined-silhouette': { pieces: customPieces }
+  },
+  iconSets: {
+    'diamond-marks': { icons: customIcons }
+  },
+  squareThemes: { midnight, mint, 'warm-sand': sand },
+  arrowStyles: {
+    'arrow-chevron-head': chevronArrow
+  },
+  assetUrls // URLs emitted by your build
+});</pre></section><section><h3>Change selection at runtime</h3><pre id="runtime-code" aria-label="Current appearance API calls"></pre></section></div><p class="gallery-copy">The catalog is assembled in source before mounting. Runtime controls select registered names; they do not register assets or modify the component’s DOM.</p></details></main><footer>Our code: <a href="./LICENSE">MIT</a> · <a href="./source/board-ui/examples/demos/README.md">Integration notes</a> · <a href="./source/board-ui-demo-source.tar.gz">Download source</a> · <a href="./THIRD-PARTY.txt">Credits &amp; licenses</a><br>Artwork: Knight’s Eye contributors · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href="https://github.com/knights-eye-chess/board-ui">Knight’s Eye Board UI</a></footer></body></html>
