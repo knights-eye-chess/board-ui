@@ -33,11 +33,11 @@ such as [chessops](https://github.com/niklasf/chessops), or supply positions you
 ## Get started
 
 The package is available as a versioned archive in this repository; it is not yet
-published on npm. [Download dev.27](https://github.com/knights-eye-chess/board-ui/raw/refs/heads/dev/artifacts/knights-eye-chess-board-ui-0.1.0-dev.27.tgz),
+published on npm. [Download dev.27](https://github.com/knights-eye-chess/board-ui/raw/refs/heads/dev/artifacts/knights-eye-chess-board-ui-0.1.0-dev.28.tgz),
 then install it in your app:
 
 ```sh
-npm install ./knights-eye-chess-board-ui-0.1.0-dev.27.tgz
+npm install ./knights-eye-chess-board-ui-0.1.0-dev.28.tgz
 mkdir -p public/pieces
 cp node_modules/@knights-eye-chess/board-ui/assets/pieces/*.png public/pieces/
 ```

@@ -2,29 +2,67 @@
   "schema": "knights-eye-npm-preparation/1",
   "candidate": {
     "name": "@knights-eye-chess/board-ui",
-    "version": "0.1.0-dev.27",
-    "archive": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.27.tgz",
-    "bytes": 4725058,
-    "sha256": "bdb6e66b7ccff8cf7c22b9a570b16fd7068d2248dc011b609a4d7797b8463904",
+    "version": "0.1.0-dev.28",
+    "archive": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.28.tgz",
+    "bytes": 4725073,
+    "sha256": "386fe9a9dd3f798e38165a68b398261d5e7ceb966d1ca47e8d25048c888b08fe",
     "dependencies": {},
     "privateSource": true,
     "privateTarball": false
   },
   "checks": {
-    "sourceAndInstalledTests": 129,
+    "metadataOnlyChangesVerified": true,
+    "nonmetadataArchiveEntriesByteIdentical": true,
+    "npmPublishDryRun": true,
+    "sourceAndInstalledTests": "not run for this candidate",
     "publicEsmImports": 19,
     "cliHelpCommands": 2,
     "strictNodeNextTypes": true,
-    "browserConsumer": "Chromium: board mount, tree PGN import, supplied-evidence classifier",
-    "npmPublishDryRun": true,
+    "browserConsumer": "not run for this candidate",
     "combinedSixArchiveInstall": true,
-    "historicalArchivesUnchanged": 62,
-    "immutableCollisionRejected": true
+    "historicalArchivesUnchanged": 54
   },
   "registryPublicationPerformed": false,
   "visibilityChanged": false,
   "limitations": [
     "No live model quality or engine performance claim",
     "Owner npm account/scope authority and publication authorization required"
-  ]
+  ],
+  "priorCandidateEvidence": {
+    "candidate": {
+      "name": "@knights-eye-chess/board-ui",
+      "version": "0.1.0-dev.27",
+      "archive": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.27.tgz",
+      "bytes": 4725058,
+      "sha256": "bdb6e66b7ccff8cf7c22b9a570b16fd7068d2248dc011b609a4d7797b8463904",
+      "dependencies": {},
+      "privateSource": true,
+      "privateTarball": false
+    },
+    "checks": {
+      "sourceAndInstalledTests": 129,
+      "publicEsmImports": 19,
+      "cliHelpCommands": 2,
+      "strictNodeNextTypes": true,
+      "browserConsumer": "Chromium: board mount, tree PGN import, supplied-evidence classifier",
+      "npmPublishDryRun": true,
+      "combinedSixArchiveInstall": true,
+      "historicalArchivesUnchanged": 62,
+      "immutableCollisionRejected": true
+    },
+    "note": "These checks were run on the prior candidate. All nonmetadata archive entries in the prior and current candidate are byte-identical; the current candidate does not claim those checks were rerun."
+  },
+  "metadataComparison": {
+    "repository": "board-ui",
+    "priorVersion": "0.1.0-dev.27",
+    "newVersion": "0.1.0-dev.28",
+    "changedArchiveEntries": [
+      "package/package.json",
+      "package/SOURCE-ORIGIN.json",
+      "package/NPM-PUBLISHING.md",
+      "package/README.md"
+    ],
+    "unchangedEntries": 107,
+    "sourceRuntimeTypesAssetsByteIdentical": true
+  }
 }
