@@ -1,0 +1,34 @@
+name: Deprecate bootstrap npm placeholders
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  cleanup:
+    if: github.ref == 'refs/heads/dev' && github.event.repository.private == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.19.0
+          registry-url: https://registry.npmjs.org/
+      - run: npm install --global npm@11.9.0
+      - name: Deprecate only verified bootstrap placeholders
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          node --input-type=module <<'JS'
+          import {spawnSync} from 'node:child_process';
+          const registry='https://registry.npmjs.org/';
+          for(const component of ['board-ui','game-tree','move-classifier','ai-analysis','pgn-annotator','cli-tools']) {
+            const name='@knights-eye-chess/'+component;
+            const lookup=spawnSync('npm',['view',name+'@0.0.0-stage','--json','--registry',registry,'--prefer-online'],{encoding:'utf8'});
+            let pkg;try{pkg=JSON.parse(lookup.stdout);}catch{}
+            if(lookup.status!==0 && pkg?.error?.code==='E404') {console.log(name+': placeholder absent');continue;}
+            if(lookup.status!==0 || pkg?.name!==name || pkg.version!=='0.0.0-stage' || pkg.description!=='Temporary package placeholder for staged publishing') throw Error('Placeholder identity review failed for '+name);
+            const message='Temporary bootstrap placeholder; install the published prerelease with @next or pin a real dev version.';
+            if(pkg.deprecated===message){console.log(name+': already deprecated');continue;}
+            const write=spawnSync('npm',['deprecate',name+'@0.0.0-stage',message,'--registry',registry],{encoding:'utf8'});
+            if(write.status!==0)throw Error('Deprecation failed for '+name+' (exit '+write.status+')');
+            console.log(name+': placeholder deprecated');
+          }
+          JS
