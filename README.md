@@ -14,7 +14,10 @@ dependencies** and works with your choice of chess library.
 **[Try three synchronized boards](https://knights-eye-chess.github.io/board-ui/)**
 · **[Explore themes and artwork](https://knights-eye-chess.github.io/board-ui/gallery.html)**
 
-![Three boards with different sizes, themes and perspectives sharing one moves strip](docs/images/three-views.png)
+<img src="docs/images/mobile-analysis.jpg" alt="Board UI in Knight’s Eye on mobile: glossy pieces, a candidate arrow, move-quality badges and nested variations" width="476">
+
+Board UI in Knight’s Eye: the host supplies the analysis; the component renders
+the board, arrow, badges and nested moves strip.
 
 ## What you can build
 
@@ -30,11 +33,11 @@ such as [chessops](https://github.com/niklasf/chessops), or supply positions you
 ## Get started
 
 The package is available as a versioned archive in this repository; it is not yet
-published on npm. [Download dev.26](https://github.com/knights-eye-chess/board-ui/raw/refs/heads/dev/artifacts/knights-eye-chess-board-ui-0.1.0-dev.26.tgz),
+published on npm. [Download dev.27](https://github.com/knights-eye-chess/board-ui/raw/refs/heads/dev/artifacts/knights-eye-chess-board-ui-0.1.0-dev.27.tgz),
 then install it in your app:
 
 ```sh
-npm install ./knights-eye-chess-board-ui-0.1.0-dev.26.tgz
+npm install ./knights-eye-chess-board-ui-0.1.0-dev.27.tgz
 mkdir -p public/pieces
 cp node_modules/@knights-eye-chess/board-ui/assets/pieces/*.png public/pieces/
 ```
@@ -133,7 +136,7 @@ Choose the presentation that fits your app:
 | No space reserved for icons | Reserved space keeps moves steady as analysis arrives |
 
 See the [moves-strip guide](docs/MOVE_STRIP.md) for a complete board-and-strip
-example. The [three-board demo](examples/demos/README.md) shows shared navigation,
+example. The [three-board demo](https://github.com/knights-eye-chess/board-ui/blob/dev/examples/demos/README.md) shows shared navigation,
 including Up/Down to switch branches.
 
 ## Documentation and development

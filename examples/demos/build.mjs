@@ -32,7 +32,7 @@ generateAssets(path.join(out,'assets','custom'));
 // Publish an explicit source/notice allowlist, never the private checkout/history.
 const librarySource=path.join(out,'source','board-ui');
 mkdirSync(librarySource,{recursive:true});
-for(const file of ['src','dist','tests','scripts','assets','build.mjs','package.json','npm-shrinkwrap.json','README.md','LICENSE','LICENSE-ARTWORK','LICENSING.md','NOTICE','THIRD_PARTY_NOTICES.md','licenses']) {
+for(const file of ['src','dist','tests','scripts','assets','build.mjs','package.json','npm-shrinkwrap.json','npm-release.json','SOURCE-ORIGIN.json','README.md','NPM-PUBLISHING.md','LICENSE','LICENSE-ARTWORK','LICENSING.md','NOTICE','THIRD_PARTY_NOTICES.md','licenses']) {
   cpSync(path.join(root,file),path.join(librarySource,file),{recursive:true});
 }
 // Keep the README's guides and screenshot available in the source download too.

@@ -1,6 +1,6 @@
 # Repository guidance
 
-This repository owns `@knights-eye-chess/board-ui` source. Read README.md and SOURCE-ORIGIN.json before changing code. The source originated in the preserved Shedal/KnightsEye backup; future changes belong here.
+This repository owns `@knights-eye-chess/board-ui` source. Read [README.md](README.md) and [SOURCE-ORIGIN.json](SOURCE-ORIGIN.json) before changing code. The origin record preserves the historical extraction snapshot; maintained source and future changes belong in [this component repository](https://github.com/knights-eye-chess/board-ui).
 
 For visual ownership, rendering or appearance API work, also read docs/VISUAL-CONTRACT.md. It records owner requirements and distinguishes the proposed implementation from currently shipped APIs.
 

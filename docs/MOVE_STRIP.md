@@ -91,8 +91,8 @@ Its selected line ends at that line's last move; a longer sibling does not exten
 the scrolling range. Your app chooses auto-follow behavior and performs all game
 tree changes through its own model.
 
-The [three-board demo](../examples/demos/src/sync.mjs) uses one standalone strip
-for all three boards. Its [chessops model](../examples/demos/src/model.mjs) converts
+The [three-board demo](https://github.com/knights-eye-chess/board-ui/blob/dev/examples/demos/src/sync.mjs) uses one standalone strip
+for all three boards. Its [chessops model](https://github.com/knights-eye-chess/board-ui/blob/dev/examples/demos/src/model.mjs) converts
 PGN variations into the strip's display view. The component itself has no game-tree
 dependency.
 

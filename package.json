@@ -1,6 +1,6 @@
 {
   "name": "@knights-eye-chess/board-ui",
-  "version": "0.1.0-dev.26",
+  "version": "0.1.0-dev.27",
   "private": true,
   "type": "module",
   "description": "Controlled engine-free chess board UI with host-owned position and legality",
@@ -42,11 +42,8 @@
     "tests",
     "build.mjs",
     "README.md",
-    "examples",
     "assets",
     "docs",
-    "npm-shrinkwrap.json",
-    "vendor",
     "SOURCE-ORIGIN.json",
     "scripts",
     "LICENSE",
@@ -54,7 +51,9 @@
     "LICENSING.md",
     "THIRD_PARTY_NOTICES.md",
     "licenses",
-    "LICENSE-ARTWORK"
+    "LICENSE-ARTWORK",
+    "NPM-PUBLISHING.md",
+    "npm-release.json"
   ],
   "sideEffects": false,
   "engines": {
@@ -71,7 +70,9 @@
     "demo:build": "npm run build && node examples/demos/build.mjs",
     "demo:serve": "npm run demo:build && node examples/demos/serve.mjs",
     "demo:test": "node --test examples/demos/tests/*.test.mjs",
-    "demo:check": "npm run demo:build && npm run demo:test && node examples/demos/tests/browser.mjs"
+    "demo:check": "npm run demo:build && npm run demo:test && node examples/demos/tests/browser.mjs",
+    "publish:verify": "node scripts/verify-release.mjs",
+    "publish:prepare": "npm run pack:checked && npm run publish:verify"
   },
   "devDependencies": {
     "esbuild": "0.28.0",

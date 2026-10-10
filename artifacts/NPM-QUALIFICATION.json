@@ -1,0 +1,30 @@
+{
+  "schema": "knights-eye-npm-preparation/1",
+  "candidate": {
+    "name": "@knights-eye-chess/board-ui",
+    "version": "0.1.0-dev.27",
+    "archive": "artifacts/knights-eye-chess-board-ui-0.1.0-dev.27.tgz",
+    "bytes": 4725058,
+    "sha256": "bdb6e66b7ccff8cf7c22b9a570b16fd7068d2248dc011b609a4d7797b8463904",
+    "dependencies": {},
+    "privateSource": true,
+    "privateTarball": false
+  },
+  "checks": {
+    "sourceAndInstalledTests": 129,
+    "publicEsmImports": 19,
+    "cliHelpCommands": 2,
+    "strictNodeNextTypes": true,
+    "browserConsumer": "Chromium: board mount, tree PGN import, supplied-evidence classifier",
+    "npmPublishDryRun": true,
+    "combinedSixArchiveInstall": true,
+    "historicalArchivesUnchanged": 62,
+    "immutableCollisionRejected": true
+  },
+  "registryPublicationPerformed": false,
+  "visibilityChanged": false,
+  "limitations": [
+    "No live model quality or engine performance claim",
+    "Owner npm account/scope authority and publication authorization required"
+  ]
+}

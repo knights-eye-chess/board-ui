@@ -95,7 +95,7 @@ that exact move, so an accepted drag does not animate a second time.
 
 For real games, use your model to validate and apply moves, handle captures,
 castling and promotion, and produce the next legal-move list. The
-[chessops demo host](../examples/demos/src/model.mjs) is a working example.
+[chessops demo host](https://github.com/knights-eye-chess/board-ui/blob/dev/examples/demos/src/model.mjs) is a working example.
 
 Change `positionKey` whenever navigating to another occurrence in a game, even
 when two occurrences have the same arrangement of pieces. Call `board.dispose()`

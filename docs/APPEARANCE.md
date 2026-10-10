@@ -92,9 +92,9 @@ Your bundler can generate those URLs, or your build can copy images into a serve
 directory. Using only `pieceUrl` overrides piece images, not icon URLs.
 
 To show bundled icon badges, copy `assets/icons/` to your public directory and
-register their URLs. The demo's [appearance setup](../examples/demos/src/appearance.mjs)
+register their URLs. The demo's [appearance setup](https://github.com/knights-eye-chess/board-ui/blob/dev/examples/demos/src/appearance.mjs)
 shows complete piece/icon mappings, three extra themes and a custom arrow shape.
-Its [asset generator](../examples/demos/generate-assets.mjs) contains the original
+Its [asset generator](https://github.com/knights-eye-chess/board-ui/blob/dev/examples/demos/generate-assets.mjs) contains the original
 custom SVG artwork. Try them in the
 [live gallery](https://knights-eye-chess.github.io/board-ui/gallery.html).
 

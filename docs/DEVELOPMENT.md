@@ -13,7 +13,7 @@ npm run demo:serve
 
 Open `http://localhost:4173`. The two demos show synchronized boards with shared
 navigation, and selectable pieces, icons, arrow shapes and themes. See their
-[integration notes](../examples/demos/README.md) for the host implementation,
+[integration notes](https://github.com/knights-eye-chess/board-ui/blob/dev/examples/demos/README.md) for the host implementation,
 source downloads and Pages deployment.
 
 ## Build and test
