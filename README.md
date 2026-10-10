@@ -32,15 +32,17 @@ such as [chessops](https://github.com/niklasf/chessops), or supply positions you
 
 ## Get started
 
-The package is available as a versioned archive in this repository; it is not yet
-published on npm. [Download dev.27](https://github.com/knights-eye-chess/board-ui/raw/refs/heads/dev/artifacts/knights-eye-chess-board-ui-0.1.0-dev.28.tgz),
-then install it in your app:
+Use Node 24 or newer. Install the public prerelease in your app:
 
 ```sh
-npm install ./knights-eye-chess-board-ui-0.1.0-dev.28.tgz
+npm install @knights-eye-chess/board-ui@next
 mkdir -p public/pieces
 cp node_modules/@knights-eye-chess/board-ui/assets/pieces/*.png public/pieces/
 ```
+
+The `next` tag currently resolves to `0.1.0-dev.31`; pin that exact version for a
+reproducible install. This is a preview API. Historical source archives and their
+provenance remain documented in [SOURCE-ORIGIN.json](SOURCE-ORIGIN.json).
 
 This assumes your app serves `public/` at its web root. The [getting-started
 guide](docs/GETTING_STARTED.md) covers asset URLs and a browser setup without a bundler.
@@ -146,6 +148,8 @@ including Up/Down to switch branches.
 - [Moves strip](docs/MOVE_STRIP.md): plain/classified moves, variations and navigation.
 - [API reference](docs/API.md): state, callbacks, gestures and styling options.
 - [Development](docs/DEVELOPMENT.md): run the demos, build and test.
+- [Release and archive guidance](NPM-PUBLISHING.md): reviewed npm releases and
+  immutable archive handling.
 
 To explore locally, use Node 24 or newer:
 
