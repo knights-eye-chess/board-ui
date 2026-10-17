@@ -110,3 +110,35 @@ test('controlled strip resolves live center crossings, bounds selected range, an
     await page.evaluate(()=>{window.plainStrip.dispose();window.customStrip.dispose();window.disabledStrip.dispose();});await page.close();
   }}finally{await browser.close();server.close();}
 });
+
+test('metric changes coalesce outside observer delivery and pending rendering is canceled on disposal',async()=>{
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+  try {
+    const page=await browser.newPage();await page.goto(`http://127.0.0.1:${server.address().port}`);
+    const result=await page.evaluate(async initial=>{
+      await document.fonts.ready;
+      const observers=[];window.ResizeObserver=class {constructor(callback){this.callback=callback;observers.push(this);}observe(){}disconnect(){}};
+      const {mountMoveStrip}=await import('/move-strip.js');
+      const strip=mountMoveStrip(document.querySelector('#strip'),{view:initial,onNavigate(){}});
+      await Promise.resolve(); // complete the initial font-ready relayout
+      let layouts=0;strip.subscribe(()=>layouts++);
+      const frames=new Map();let serial=0,canceled=0;
+      window.requestAnimationFrame=callback=>{frames.set(++serial,callback);return serial;};
+      window.cancelAnimationFrame=id=>{if(frames.delete(id))canceled++;};
+      let button=document.querySelector('#strip').firstElementChild.shadowRoot.querySelector('button');
+      const metric=observers[0];
+      button.style.paddingLeft='30px';metric.callback([{target:button}]);
+      button.style.paddingLeft='40px';metric.callback([{target:button}]);
+      const deferred={frames:frames.size,layouts};
+      const scheduled=[...frames.values()];frames.clear();scheduled.forEach(callback=>callback(performance.now()));
+      const completed={frames:frames.size,layouts};
+      button=document.querySelector('#strip').firstElementChild.shadowRoot.querySelector('button');
+      metric.callback([{target:button}]);const unchanged=frames.size;
+      button.style.paddingLeft='50px';metric.callback([{target:button}]);
+      const stale=[...frames.values()];strip.dispose();stale.forEach(callback=>callback(performance.now()));
+      return {deferred,completed,unchanged,canceled,remaining:frames.size,layouts,children:document.querySelector('#strip').childElementCount};
+    },view);
+    assert.deepEqual(result,{deferred:{frames:1,layouts:0},completed:{frames:0,layouts:1},unchanged:0,canceled:1,remaining:0,layouts:1,children:0});
+  } finally {await browser.close();server.close();}
+});
