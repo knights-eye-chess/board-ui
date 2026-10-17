@@ -119,7 +119,9 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
   let pointerId:number|null=null,pointerStart=0,pointerMoved=false,suppressClick=false,userGesture=false,userPositioned=false,scrollFrame=0,settleTimer=0,programmaticUntil=0,scrollCallback=false,lastRequested='',renderPending=false;
   const branchLanes:HTMLElement[]=[];let gestureWidth=0;
   const metricWidths=new WeakMap<Element,number>();
-  const metricObserver=typeof win.ResizeObserver==='function'?new win.ResizeObserver(entries=>{let changed=false;for(const entry of entries){const width=entry.target.getBoundingClientRect().width,previous=metricWidths.get(entry.target);metricWidths.set(entry.target,width);if(previous!==undefined&&Math.abs(width-previous)>.25)changed=true;}if(changed)render(userPositioned);}):null;
+  let metricRenderFrame=0;
+  function scheduleMetricRender(){if(disposed||metricRenderFrame)return;metricRenderFrame=win.requestAnimationFrame(()=>{metricRenderFrame=0;if(!disposed)render(userPositioned);});}
+  const metricObserver=typeof win.ResizeObserver==='function'?new win.ResizeObserver(entries=>{let changed=false;for(const entry of entries){const width=entry.target.getBoundingClientRect().width,previous=metricWidths.get(entry.target);metricWidths.set(entry.target,width);if(previous!==undefined&&Math.abs(width-previous)>.25)changed=true;}if(changed)scheduleMetricRender();}):null;
   function observeMetrics(){metricObserver?.disconnect();for(const button of buttons.values()){metricWidths.set(button,button.getBoundingClientRect().width);metricObserver?.observe(button);}}
   function clearTimer(){win.clearTimeout(settleTimer);settleTimer=0;}
   function centerOf(button:HTMLElement){const r=button.getBoundingClientRect();return r.left+r.width/2;}
@@ -237,6 +239,6 @@ export function mountMoveStrip(host: HTMLElement, options: MoveStripOptions): Mo
     getCurrentBounds(){const identity=key(view.current),button=buttons.get(identity);return button?{key:identity,rect:button.getBoundingClientRect()}:null;},
     subscribe(listener){if(disposed)throw new Error('Move strip is disposed.');subscribers.add(listener);return ()=>subscribers.delete(listener);},
     relayout(){if(disposed)throw new Error('Move strip is disposed.');render(userPositioned);},
-    dispose(){if(disposed)return;disposed=true;resizeObserver?.disconnect();metricObserver?.disconnect();clearTimer();if(scrollFrame)win.cancelAnimationFrame(scrollFrame);listeners.forEach(remove=>remove());owned.remove();buttons.clear();subscribers.clear();restoreHost();}
+    dispose(){if(disposed)return;disposed=true;resizeObserver?.disconnect();metricObserver?.disconnect();if(metricRenderFrame)win.cancelAnimationFrame(metricRenderFrame);metricRenderFrame=0;clearTimer();if(scrollFrame)win.cancelAnimationFrame(scrollFrame);listeners.forEach(remove=>remove());owned.remove();buttons.clear();subscribers.clear();restoreHost();}
   };
 }
